@@ -1,8 +1,11 @@
 {
-  "name": "app",
+  "name": "Fin'Est",
   "version": "0.1.0",
   "private": true,
-  "main": "Main.js",
+  "homepage": "./",
+  "author": "Mxnxn Inc.",
+  "description": "Fin'est is estimator for architects and interior designers",
+  "main": "build/electron.js",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
@@ -12,9 +15,13 @@
     "concurrently": "^6.0.0",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
-    "electron": "^11.3.0",
+    "electron-is-dev": "^2.0.0",
+    "exceljs": "^4.2.0",
     "express": "^4.17.1",
+    "express-logging": "^1.1.1",
+    "history": "^5.0.0",
     "knex": "^0.21.18",
+    "log4js": "^6.3.0",
     "node-sass": "^5.0.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -31,7 +38,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "elec-start": "electron .",
-    "elec-react": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\""
+    "elec-build": "electron-builder ",
+    "elec-react": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
+    "postinstall": "electron-builder install-app-deps"
   },
   "eslintConfig": {
     "extends": [
@@ -50,5 +59,25 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "build": {
+    "appId": "com.finest.app",
+    "compression": "normal",
+    "files": [
+      "build/**/*",
+      "data/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "data"
+    },
+    "extraFiles": {
+      "from": "build",
+      "to": "build"
+    }
+  },
+  "devDependencies": {
+    "electron": "^12.0.0",
+    "electron-builder": "^22.10.5"
   }
 }

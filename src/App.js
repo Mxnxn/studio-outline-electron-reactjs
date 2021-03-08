@@ -1,14 +1,24 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./css/style.scss";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, HashRouter, Redirect, Route, Switch } from "react-router-dom";
 import MainView from "./Components/MainView";
 import DetailView from "./Components/DetailView";
+import axios from "axios";
+import { createHashHistory } from "history";
+
+const history = createHashHistory();
+
 function App() {
+    const [state, setState] = useState({
+        view: "FRONT",
+        id: undefined,
+    });
+
     return (
-        <BrowserRouter>
-            <Route path="/" exact render={() => <MainView />} />
-            <Route path="/clientid" render={() => <DetailView />} />
-        </BrowserRouter>
+        <HashRouter history={history} basename="/">
+            {state.view === "FRONT" && <MainView setSelectView={setState} />}
+            {state.view === "BACK" && <DetailView selectView={state} setSelectView={setState} />}
+        </HashRouter>
     );
 }
 

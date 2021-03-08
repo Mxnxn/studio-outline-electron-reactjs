@@ -37,11 +37,11 @@ class ClientAPI {
         });
     }
 
-    getClient(formData) {
+    getClient(id) {
         return new Promise(async (resolve, reject) => {
             try {
-                const res = await axios.get(`${process.env.REACT_APP_API_URL}/client/get`, formData);
-                if (!res.data) throw res.data;
+                const res = await axios.get(`${process.env.REACT_APP_API_URL}/client/get/${id}`);
+                if (!res.data.data) throw res.data;
                 resolve(res.data);
             } catch (error) {
                 reject(error);

@@ -1,32 +1,21 @@
 const app = require("express").Router();
-const Entry = require("../Data/api/entries");
+const Product = require("../api/products");
 app.use("/*", (req, res, next) => next());
 app.post("/add", async (req, res) => {
     try {
-        if (
-            !req.body.eid ||
-            !req.body.client ||
-            !req.body.categories ||
-            !req.body.subcategories ||
-            !req.body.description ||
-            !req.body.qty ||
-            !req.body.mrate ||
-            !req.body.lrate ||
-            !req.body.cpaid ||
-            !req.body.total
-        ) {
+        if (!req.body.productname || !req.body.mrate || !req.body.lrate) {
             return res.status(200).json({
                 message: "Invalid Request",
                 status: false,
             });
         }
-        const result = await Entry.addEntry({
+        const result = await Product.addProduct({
             pname: req.body.productname,
             mrate: req.body.mrate,
             lrate: req.body.lrate,
         });
-        const obj = await Entry.getEntry(result[0]);
-        return res.json(200).json({ data: obj[0] });
+        const obj = await Product.getProduct(result[0]);
+        return res.status(200).json({ data: obj[0] });
     } catch (error) {
         return res.status(500).json({
             message: error.message,
@@ -43,8 +32,8 @@ app.get("/get", async (req, res) => {
                 status: false,
             });
         }
-        const result = await Entry.getEntry(req.body.id);
-        return res.json(200).json({ data: result[0] });
+        const result = await Product.getProduct(req.body.id);
+        return res.status(200).json({ data: result[0] });
     } catch (error) {
         return res.status(500).json({
             message: error.message,
@@ -55,8 +44,8 @@ app.get("/get", async (req, res) => {
 
 app.get("/getall", async (req, res) => {
     try {
-        const result = await Entry.getAllEntries();
-        return res.json(200).json({ data: result });
+        const result = await Product.getAllProducts();
+        return res.status(200).json({ data: result });
     } catch (error) {
         return res.status(500).json({
             message: error.message,
@@ -73,8 +62,8 @@ app.post("/delete", async (req, res) => {
                 status: false,
             });
         }
-        const result = await Entry.deleteEntry(id);
-        return res.json(200).json({ data: result[0] });
+        await Product.deleteProduct(req.body.id);
+        return res.status(200).json({ message: "Deleted Successfully!" });
     } catch (error) {
         return res.status(500).json({
             message: error.message,
@@ -85,35 +74,16 @@ app.post("/delete", async (req, res) => {
 
 app.post("/update", async (req, res) => {
     try {
-        if (
-            !req.body.eid ||
-            !req.body.client ||
-            !req.body.categories ||
-            !req.body.subcategories ||
-            !req.body.description ||
-            !req.body.qty ||
-            !req.body.mrate ||
-            !req.body.lrate ||
-            !req.body.cpaid ||
-            !req.body.total ||
-            !req.body.id
-        ) {
+        if (!req.body.productname || !req.body.mrate || !req.body.lrate || !req.body.id) {
             return res.status(200).json({
                 message: "Invalid Request",
                 status: false,
             });
         }
-        const result = await Entry.updateEntry(req.body.id, {
-            eid: req.body.eid,
-            client: req.body.client,
-            categories: req.body.categories,
-            subcategories: req.body.subcategories,
-            description: req.body.description,
-            qty: req.body.qty,
+        const result = await Product.updateProduct(req.body.id, {
+            pname: req.body.productname,
             mrate: req.body.mrate,
             lrate: req.body.lrate,
-            cpaid: req.body.cpaid,
-            total: req.body.total,
         });
         return res.status(200).json({ data: result[0] });
     } catch (error) {

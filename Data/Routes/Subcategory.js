@@ -1,24 +1,20 @@
 const app = require("express").Router();
-const Client = require("../Data/api/clients");
+const Subcategory = require("../api/subcategories");
 app.use("/*", (req, res, next) => next());
-
 app.post("/add", async (req, res) => {
     try {
-        if (!req.body.clientname || !req.body.sitename) {
-            return res.status(400).json({
+        if (!req.body.subcatname) {
+            return res.status(200).json({
                 message: "Invalid Request",
                 status: false,
             });
         }
-        const result = await Client.addClient({
-            clientname: req.body.clientname,
-            sitename: req.body.sitename,
-            date: new Date(),
+        const result = await Subcategory.addSubcategory({
+            subcatname: req.body.subcatname,
         });
-        console.log(await Client.getClient(result[0]))
-        return res.status(200).json({ data:result[0],message:"Successfully added!" });
+        const obj = await Subcategory.getSubcategory(result[0]);
+        return res.status(200).json({ data: obj[0] });
     } catch (error) {
-        console.log(error);
         return res.status(500).json({
             message: error.message,
             status: false,
@@ -34,7 +30,7 @@ app.get("/get", async (req, res) => {
                 status: false,
             });
         }
-        const result = await Client.getClient(req.body.id);
+        const result = await Subcategory.getSubcategory(req.body.id);
         return res.status(200).json({ data: result[0] });
     } catch (error) {
         return res.status(500).json({
@@ -46,8 +42,8 @@ app.get("/get", async (req, res) => {
 
 app.get("/getall", async (req, res) => {
     try {
-        const result = await Client.getAllClients();
-        return res.json({ data: result });
+        const result = await Subcategory.getAllSubcategories();
+        return res.status(200).json({ data: result });
     } catch (error) {
         return res.status(500).json({
             message: error.message,
@@ -59,15 +55,14 @@ app.get("/getall", async (req, res) => {
 app.post("/delete", async (req, res) => {
     try {
         if (!req.body.id) {
-            return res.status(400).json({
+            return res.status(200).json({
                 message: "Invalid Request",
                 status: false,
             });
         }
-        const result = await Client.deleteClient(req.body.id);
-        return res.status(200).json({ message: "Successfully deleted!" });
+        await Subcategory.deleteSubcategory(req.body.id);
+        return res.status(200).json({ message: "Deleted Successfully!" });
     } catch (error) {
-        console.log(error)
         return res.status(500).json({
             message: error.message,
             status: false,
@@ -77,17 +72,14 @@ app.post("/delete", async (req, res) => {
 
 app.post("/update", async (req, res) => {
     try {
-        if (!req.body.clientname || !req.body.sitename || !req.body.id) {
-            return res.status(400).json({
+        if (!req.body.subcatname || !req.body.id) {
+            return res.status(200).json({
                 message: "Invalid Request",
                 status: false,
             });
         }
-        const result = await Client.updateClient(req.body.id, {
-            clientname: req.body.clientname,
-            sitename: req.body.sitename,
-        });
-        return res.status(200).json({ message: "successfully added!", status: true });
+        const result = await Subcategory.updateSubcategory(req.body.id, { subcatname: req.body.subcatname });
+        return res.status(200).json({ data: result[0] });
     } catch (error) {
         return res.status(500).json({
             message: error.message,

@@ -2,60 +2,71 @@ import axios from "axios";
 
 class EntryAPI {
     addEntry(formData) {
-        return Promise(async (resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 const res = await axios.post(`${process.env.REACT_APP_API_URL}/entry/add`, formData);
-                if (res.data.code !== 200) throw res.data;
+                if (!res.data.message) throw res.data;
                 resolve(res.data);
             } catch (err) {
-                reject(error);
+                reject(err);
             }
         });
     }
 
     updateEntry(formData) {
-        return Promise(async (resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 const res = await axios.post(`${process.env.REACT_APP_API_URL}/entry/update`, formData);
-                if (res.data.code !== 200) throw res.data;
+                if (!res.data.message) throw res.data;
                 resolve(res.data);
             } catch (err) {
-                reject(error);
+                reject(err);
             }
         });
     }
     getAllEntry() {
-        return Promise(async (resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 const res = await axios.get(`${process.env.REACT_APP_API_URL}/entry/getall`);
-                if (res.data.code !== 200) throw res.data;
+                if (!res.data.message) throw res.data;
                 resolve(res.data);
             } catch (err) {
-                reject(error);
+                reject(err);
             }
         });
     }
 
+    getAllEntryOfThis(id) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const res = await axios.get(`${process.env.REACT_APP_API_URL}/entry/getall/${id}`);
+                if (!res.data.data) throw res.data;
+                resolve(res.data);
+            } catch (err) {
+                reject(err);
+            }
+        });
+    }
     getEntry(formData) {
-        return Promise(async (resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             try {
                 const res = await axios.get(`${process.env.REACT_APP_API_URL}/entry/get`, formData);
-                if (res.data.code !== 200) throw res.data;
+                if (!res.data.message) throw res.data;
                 resolve(res.data);
             } catch (err) {
-                reject(error);
+                reject(err);
             }
         });
     }
 
-    deleteEntry(formData) {
-        return Promise(async (resolve, reject) => {
+    deleteEntry(id) {
+        return new Promise(async (resolve, reject) => {
             try {
-                const res = await axios.post(`${process.env.REACT_APP_API_URL}/entry/delete`, formData);
-                if (res.data.code !== 200) throw res.data;
+                const res = await axios.delete(`${process.env.REACT_APP_API_URL}/entry/delete/${id}`);
+                if (!res.data.message) throw res.data;
                 resolve(res.data);
             } catch (err) {
-                reject(error);
+                reject(err);
             }
         });
     }
