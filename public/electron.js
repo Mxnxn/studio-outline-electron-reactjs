@@ -5,7 +5,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const url = require("url");
 const path = require("path");
-
+const log4js = require("log4js");
+const expressLogging = require("express-logging");
 log4js.configure({
     appenders: {
         console: {
@@ -57,7 +58,6 @@ function createWindow() {
         width: 1440,
         height: 860,
         resizable: false,
-        frame: false,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,
