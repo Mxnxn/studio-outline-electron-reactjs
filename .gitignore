@@ -6,3 +6,4 @@ build
 data/binaries/data.sqlite
 Data/binaries/data.sqlite
 exports
+data.sqlite

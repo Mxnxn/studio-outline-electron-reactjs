@@ -26,7 +26,6 @@ log4js.configure({
     },
 });
 let logger = log4js.getLogger();
-let lg = log4js.getLogger("dateFile");
 express.use(expressLogging(logger));
 express.use(cors());
 express.use(bodyParser.urlencoded({ extended: false }));
@@ -58,6 +57,7 @@ function createWindow() {
         width: 1440,
         height: 860,
         resizable: false,
+        frame: false,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,
@@ -69,6 +69,7 @@ function createWindow() {
         protocol: "file:",
         slashes: true,
     });
+    mainWindow.removeMenu();
     mainWindow.loadURL(startUrl);
 }
 

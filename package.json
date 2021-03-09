@@ -39,6 +39,7 @@
     "eject": "react-scripts eject",
     "elec-start": "electron .",
     "elec-build": "electron-builder ",
+    "elec-win": "electron-builder --win --x64",
     "elec-react": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps"
   },
@@ -65,11 +66,11 @@
     "compression": "normal",
     "files": [
       "build/**/*",
-      "data/**/*",
+      "Data/**/*",
       "node_modules/**/*"
     ],
     "directories": {
-      "buildResources": "data"
+      "buildResources": "Data"
     },
     "extraFiles": {
       "from": "build",
