@@ -39,8 +39,10 @@
     "eject": "react-scripts eject",
     "elec-start": "electron .",
     "elec-build": "electron-builder ",
+    "elec-win": "electron-builder --win --x64",
     "elec-react": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "pack": "electron-packager . . --overwrite --platform=win32"
   },
   "eslintConfig": {
     "extends": [
@@ -65,19 +67,26 @@
     "compression": "normal",
     "files": [
       "build/**/*",
-      "data/**/*",
+      "Data/**/*",
       "node_modules/**/*"
     ],
     "directories": {
-      "buildResources": "data"
+      "buildResources": "Data"
     },
-    "extraFiles": {
-      "from": "build",
-      "to": "build"
-    }
+    "extraFiles": [
+      {
+        "from": "build",
+        "to": "build"
+      },
+      {
+        "from": "Data",
+        "to": "Data"
+      }
+    ]
   },
   "devDependencies": {
     "electron": "^12.0.0",
-    "electron-builder": "^22.10.5"
+    "electron-builder": "^22.10.5",
+    "electron-packager": "^15.2.0"
   }
 }

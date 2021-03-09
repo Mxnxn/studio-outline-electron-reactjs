@@ -115,8 +115,7 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                             temp.lrate = state.products[prod].lrate;
                             temp.mrate = state.products[prod].mrate;
                             const total =
-                                Number(temp.length) *
-                                Number(temp.height) *
+                                Number(temp.qty) *
                                 (state.products[prod].lrate + state.products[prod].mrate);
                             temp.total = total;
                             temp.amountDue = total - temp.cpaid;
@@ -136,25 +135,12 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
             <td>
                 <input
                     className="qty-field"
-                    value={el.length}
+                    value={el.qty}
+                    type="number"
                     onChange={(evt) => {
                         let temp = { ...dataField[index] };
-                        temp.length = evt.target.value;
-                        const total = Number(evt.target.value) * Number(temp.height) * (temp.mrate + temp.lrate);
-                        temp.total = total;
-                        temp.amountDue = total - temp.cpaid;
-                        dataField.splice(index, 1);
-                        dataField.splice(index, 0, temp);
-                        setDataField([...dataField]);
-                    }}
-                />
-                <input
-                    className="qty-field"
-                    value={el.height}
-                    onChange={(evt) => {
-                        let temp = { ...dataField[index] };
-                        temp.height = evt.target.value;
-                        const total = Number(evt.target.value) * Number(temp.length) * (temp.mrate + temp.lrate);
+                        temp.qty = Number(evt.target.value) ;
+                        const total = Number(evt.target.value) * (temp.mrate + temp.lrate);
                         temp.total = total;
                         temp.amountDue = total - temp.cpaid;
                         dataField.splice(index, 1);
@@ -164,21 +150,34 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                 />
             </td>
             <td>
-                <select className="type-field">
-                    <option>SQ.ft</option>
-                    <option>Rn.ft</option>
-                    <option>Lumsum</option>
-                    <option>-</option>
+                <select className="type-field" onChange={(evt)=>{
+                    let temp = { ...dataField[index] };
+                    temp.type = (evt.target.value) ;
+                    if(evt.target.value === "Lumsum"){
+                        temp.mrate = 0;
+                        temp.lrate = 0;
+                        temp.total = 1
+                    }
+                    dataField.splice(index, 1);
+                    dataField.splice(index, 0, temp);
+                    setDataField([...dataField]);
+                }}>
+                    {el.type === "SQ.ft" ? <option selected value="SQ.ft">SQ.ft</option>:<option value="SQ.ft">SQ.ft</option>}
+                    {el.type === "Rn.ft" ? <option selected value="Rn.ft">Rn.ft</option>:<option value="Rn.ft">Rn.ft</option>}
+                    {el.type === "Lumsum" ? <option selected value="Lumsum">Lumsum</option>:<option value="Lumsum">Lumsum</option>}
+                    {el.type === "-" ? <option selected value="nope">-</option>:<option value="nope">-</option>}
                 </select>
             </td>
             <td>
                 <input
                     className="mrate-field"
+                    type="number"
+                    disabled={el.type === "Lumsum" ? true : false}
                     value={el.mrate}
                     onChange={(evt) => {
                         let temp = { ...dataField[index] };
-                        temp.mrate = evt.target.value;
-                        const total = Number(temp.length) * Number(temp.height) * (evt.target.value + temp.lrate);
+                        temp.mrate = Number(evt.target.value);
+                        const total = Number(temp.qty) * (Number(evt.target.value) + Number(temp.lrate));
                         temp.total = total;
                         temp.amountDue = total - temp.cpaid;
                         dataField.splice(index, 1);
@@ -191,10 +190,14 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                 <input
                     className="lrate-field"
                     value={el.lrate}
+                    type="number"
+                    disabled={el.type === "Lumsum" ? true : false}
+
+                    min="0"
                     onChange={(evt) => {
                         let temp = { ...dataField[index] };
-                        temp.lrate = evt.target.value;
-                        const total = Number(temp.length) * Number(temp.height) * (evt.target.value + temp.mrate);
+                        temp.lrate = Number(evt.target.value);
+                        const total = Number(temp.qty) * (Number(evt.target.value) + Number(temp.mrate));
                         temp.total = total;
                         temp.amountDue = total - temp.cpaid;
                         dataField.splice(index, 1);
@@ -207,11 +210,11 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                 <input
                     className="t-field"
                     value={el.cpaid}
+                    type="number"
                     onChange={(evt) => {
                         let temp = { ...dataField[index] };
-
-                        temp.cpaid = evt.target.value;
-                        temp.amountDue = temp.total - evt.target.value;
+                        temp.cpaid = Number(evt.target.value);
+                        temp.amountDue = temp.total - Number(evt.target.value);
                         dataField.splice(index, 1);
                         dataField.splice(index, 0, temp);
                         setDataField([...dataField]);
@@ -219,7 +222,14 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                 />
             </td>
             <td>
-                <input className="t-field" value={el.total} />
+                <input className="t-field" value={el.total} type="number" onChange={(evt) => {
+                        let temp = { ...dataField[index] };
+                        temp.total = Number(evt.target.value);
+                        temp.amountDue = Number(evt.target.value) - temp.cpaid;
+                        dataField.splice(index, 1);
+                        dataField.splice(index, 0, temp);
+                        setDataField([...dataField]);
+                    }} />
             </td>
         </tr>
     );

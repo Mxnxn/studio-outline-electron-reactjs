@@ -41,8 +41,8 @@ async function createEntry() {
             table.integer("catid").references("catid").inTable("categories");
             table.integer("subcatid").references("subcatid").inTable("subcategories");
             table.string("description");
-            table.float("length");
-            table.float("height");
+            table.float("qty");
+            table.string("type");
             table.float("mrate");
             table.float("lrate");
             table.float("cpaid");

@@ -1,12 +1,8 @@
 const { app, BrowserWindow } = require("electron");
 const Tables = require("../data/tables");
-const exppp = require("express");
 const express = require("express")();
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const log4js = require("log4js");
-const expressLogging = require("express-logging");
-const isDev = require("electron-is-dev");
 const url = require("url");
 const path = require("path");
 
@@ -62,6 +58,7 @@ function createWindow() {
         width: 1440,
         height: 860,
         resizable: false,
+        frame:false,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: true,

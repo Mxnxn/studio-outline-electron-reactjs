@@ -62,8 +62,8 @@ export default function ClientView({ clients, selectedView, setSelectView }) {
                         let temp2 = [
                             {
                                 cid: "new",
-                                clientname: "Enter name",
-                                sitename: "Enter site",
+                                clientname: "",
+                                sitename: "",
                                 editView: true,
                                 editMode: false,
                             },
@@ -72,7 +72,7 @@ export default function ClientView({ clients, selectedView, setSelectView }) {
                             const element = temp[i];
                             temp2 = [...temp2, element];
                         }
-                        setClient({ clientName: "Enter name", sitename: "Enter sitename" });
+                        setClient({ ...client,clientName: "", sitename: "" });
                         setState({ ...state, clients: [...temp2] });
                     }}
                 >
@@ -118,6 +118,7 @@ export default function ClientView({ clients, selectedView, setSelectView }) {
                                     <input
                                         className="cname-input"
                                         type="text"
+                                        placeholder="Client Name"
                                         value={client.clientName}
                                         onChange={(evt) => setClient({ ...client, clientName: evt.target.value })}
                                     />
@@ -164,6 +165,7 @@ export default function ClientView({ clients, selectedView, setSelectView }) {
                                     <input
                                         className="sname-input"
                                         type="text"
+                                        placeholder="Site Name"
                                         value={client.sitename}
                                         onChange={(evt) => setClient({ ...client, sitename: evt.target.value })}
                                     />

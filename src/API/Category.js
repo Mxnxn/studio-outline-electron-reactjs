@@ -48,11 +48,11 @@ class CategoryAPI {
         });
     }
 
-    deleteCategory(formData) {
+    deleteCategory(id) {
         return new Promise(async (resolve, reject) => {
             try {
-                const res = await axios.post(`${process.env.REACT_APP_API_URL}/category/delete`, formData);
-                if (!res.data.messsage) throw res.data;
+                const res = await axios.delete(`${process.env.REACT_APP_API_URL}/category/delete/${id}`);
+                if (!res.data.message) throw res.data;
                 resolve(res.data);
             } catch (err) {
                 reject(err);

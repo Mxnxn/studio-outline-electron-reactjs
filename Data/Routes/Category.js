@@ -53,16 +53,16 @@ app.get("/getall", async (req, res) => {
     }
 });
 
-app.post("/delete", async (req, res) => {
+app.delete("/delete/:id", async (req, res) => {
     try {
-        if (!req.body.id) {
-            return res.status(200).json({
+        if (!req.params.id) {
+            return res.status(400).json({
                 message: "Invalid Request",
                 status: false,
             });
         }
-        const result = await Category.deleteCategory(id);
-        return res.status(200).json({ data: result[0] });
+        const result = await Category.deleteCategory(req.params.id);
+        return res.status(200).json({ data: result[0],message:"Deleted Successfully!" });
     } catch (error) {
         return res.status(500).json({
             message: error.message,

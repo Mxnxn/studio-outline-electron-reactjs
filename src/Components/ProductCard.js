@@ -43,7 +43,7 @@ const ProductCard = (props) => {
     const addProduct = async () => {
         try {
             const res = await Product.addProduct({
-                productname: state.inputValues.pname,
+                productname: state.inputValues.pname.charAt(0).toUpperCase() + state.inputValues.pname.slice(1),
                 lrate: state.inputValues.lrate,
                 mrate: state.inputValues.mrate,
             });
@@ -152,8 +152,8 @@ const ProductCard = (props) => {
             </div>
             <div className="category-card  to-bot-product ">
                 <div className="card-heading">
-                    <span className="smtext">ADD</span>
-                    <span className="lgtext"></span>
+                    <span className="smtext">ADDED</span>
+                    <span className="lgtext">PRODUCTS</span>
                 </div>
                 <div className="card-body">
                     {/* <div className="in-group">

@@ -66,7 +66,7 @@ export default function EntryCardView({ name }) {
             alert("Field can't be empty");
         }
         try {
-            const res = await Category.addCategory({ categoryname: state.inputValues.catName });
+            const res = await Category.addCategory({ categoryname: state.inputValues.catName.toUpperCase() });
             if (res.data) {
                 const temp = [...state.categories, res.data];
                 setState({
@@ -91,7 +91,7 @@ export default function EntryCardView({ name }) {
             alert("Field can't be empty");
         }
         try {
-            const res = await Subcategory.addSubcategory({ subcatname: state.inputValues.subName });
+            const res = await Subcategory.addSubcategory({ subcatname: state.inputValues.subName.toUpperCase() });
             if (res.data) {
                 const temp = [...state.subcategories, res.data];
                 setState({
@@ -160,6 +160,32 @@ export default function EntryCardView({ name }) {
         }
     };
 
+    const deleteCategory = async (id) => {
+        try {
+            await Category.deleteCategory(id);
+            let index = state.categories.findIndex((el) => el.catid === id);
+            console.log(index);
+            if (index !== -1) {
+                let temp = [...state.categories];
+                temp.splice(index, 1);
+                setState({
+                    ...state,
+                    categories: [...temp],
+                });
+                const li = pageOfCategory.currentPage * pageOfCategory.perPage;
+                const si = pageOfCategory.currentPage * pageOfCategory.perPage - pageOfCategory.perPage;
+                setPageOfCategory({
+                    ...pageOfCategory,
+                    lastIndex: li,
+                    startIndex: si,
+                    rows: temp.slice(si, li),
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return name === "CATEGORY" ? (
         <div className="col-card">
             <div className="category-card no-ml cat-card">
@@ -203,7 +229,7 @@ export default function EntryCardView({ name }) {
                                     <td>{index + 1}</td>
                                     <td>{el.catname}</td>
                                     <td>
-                                        <button>
+                                        <button onClick={()=>{deleteCategory(el.catid)}}>
                                             <Trash size="12" />
                                         </button>
                                     </td>
