@@ -1,37 +1,33 @@
 const { app, BrowserWindow } = require("electron");
 const Tables = require("../data/tables");
-const exppp = require("express");
 const express = require("express")();
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const log4js = require("log4js");
-const expressLogging = require("express-logging");
-const isDev = require("electron-is-dev");
 const url = require("url");
 const path = require("path");
 
-// log4js.configure({
-//     appenders: {
-//         console: {
-//             type: "stdout",
-//             layout: { type: "colored" },
-//         },
-//         dateFile: {
-//             type: "dateFile",
-//             filename: `./logs/api.log`,
-//             layout: { type: "basic" },
-//             compress: true,
-//             daysToKeep: 14,
-//             keepFileExt: true,
-//         },
-//     },
-//     categories: {
-//         default: { appenders: ["console", "dateFile"], level: "info" },
-//     },
-// });
-// let logger = log4js.getLogger();
-// let lg = log4js.getLogger("dateFile");
-// express.use(expressLogging(logger));
+log4js.configure({
+    appenders: {
+        console: {
+            type: "stdout",
+            layout: { type: "colored" },
+        },
+        dateFile: {
+            type: "dateFile",
+            filename: `./logs/api.log`,
+            layout: { type: "basic" },
+            compress: true,
+            daysToKeep: 14,
+            keepFileExt: true,
+        },
+    },
+    categories: {
+        default: { appenders: ["console", "dateFile"], level: "info" },
+    },
+});
+let logger = log4js.getLogger();
+let lg = log4js.getLogger("dateFile");
+express.use(expressLogging(logger));
 express.use(cors());
 express.use(bodyParser.urlencoded({ extended: false }));
 express.use(bodyParser.json());

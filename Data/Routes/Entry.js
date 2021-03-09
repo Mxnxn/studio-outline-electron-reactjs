@@ -7,15 +7,9 @@ app.post("/add", async (req, res) => {
         if (
             !req.body.cid ||
             !req.body.catid ||
-            !req.body.product ||
-            !req.body.length ||
-            !req.body.height ||
-            !req.body.mrate ||
-            !req.body.lrate ||
-            !req.body.cpaid ||
-            !req.body.total
+            !req.body.product 
         ) {
-            return res.status(200).json({
+            return res.status(400).json({
                 message: "Invalid Request",
                 status: false,
             });
@@ -25,8 +19,9 @@ app.post("/add", async (req, res) => {
             catid: req.body.catid,
             subcatid: req.body.subcatid ? req.body.subcatid : null,
             description: req.body.product,
-            length: req.body.length,
-            height: req.body.height,
+            qty:req.body.qty,
+            type:req.body.type,
+
             mrate: req.body.mrate,
             lrate: req.body.lrate,
             cpaid: req.body.cpaid,
@@ -109,13 +104,7 @@ app.post("/update", async (req, res) => {
             !req.body.eid ||
             !req.body.cid ||
             !req.body.catid ||
-            !req.body.product ||
-            !req.body.length ||
-            !req.body.height ||
-            !req.body.mrate ||
-            !req.body.lrate ||
-            !req.body.cpaid ||
-            !req.body.total
+            !req.body.product 
         ) {
             return res.status(400).json({
                 message: "Invalid Request",
@@ -127,8 +116,8 @@ app.post("/update", async (req, res) => {
             catid: req.body.catid,
             subcatid: req.body.subcatid ? req.body.subcatid : null,
             description: req.body.description,
-            length: req.body.length,
-            height: req.body.height,
+            qty:req.body.qty,
+            type: req.body.type,
             mrate: req.body.mrate,
             lrate: req.body.lrate,
             cpaid: req.body.cpaid,

@@ -1,14 +1,19 @@
 const knex = require("knex");
-const fs = require("fs");
-
-if (!fs.existsSync("./data")) {
-    fs.mkdirSync("./data");
-    fs.mkdirSync("./data/binaries");
-}
+// const fs = require("fs");
+const path = require("path");
+const apppath = path.resolve(".");
+// const os = require("os");
+// if (!fs.existsSync("./data")) {
+//     fs.mkdirSync("./data");
+//     fs.mkdirSync("./data/binaries");
+// }
+// os.platform() for OS
+// app path will resolve current working directory path from root
+// console.log(os.platform(),apppath);
 const connectKnex = knex({
     client: "sqlite3",
     connection: {
-        filename: "data/binaries/data.sqlite",
+        filename: apppath + "/data.sqlite",
     },
     useNullAsDefault: true,
 });
