@@ -47,7 +47,6 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
             </td>
             <td className="cat-group">
                 <input
-                    autoFocus
                     type="text"
                     onChange={(evt, lol) => {
                         let temp = { ...dataField[index] };
@@ -114,9 +113,7 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                             temp.description = state.products[prod].pname;
                             temp.lrate = state.products[prod].lrate;
                             temp.mrate = state.products[prod].mrate;
-                            const total =
-                                Number(temp.qty) *
-                                (state.products[prod].lrate + state.products[prod].mrate);
+                            const total = Number(temp.qty) * (state.products[prod].lrate + state.products[prod].mrate);
                             temp.total = total;
                             temp.amountDue = total - temp.cpaid;
                         }
@@ -139,10 +136,10 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                     type="number"
                     onChange={(evt) => {
                         let temp = { ...dataField[index] };
-                        temp.qty = Number(evt.target.value) ;
+                        temp.qty = Number(evt.target.value);
                         const total = Number(evt.target.value) * (temp.mrate + temp.lrate);
                         temp.total = total;
-                        temp.amountDue = total - temp.cpaid;
+                        temp.amountDue = total - Number(temp.cpaid);
                         dataField.splice(index, 1);
                         dataField.splice(index, 0, temp);
                         setDataField([...dataField]);
@@ -150,22 +147,49 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                 />
             </td>
             <td>
-                <select className="type-field" onChange={(evt)=>{
-                    let temp = { ...dataField[index] };
-                    temp.type = (evt.target.value) ;
-                    if(evt.target.value === "Lumsum"){
-                        temp.mrate = 0;
-                        temp.lrate = 0;
-                        temp.total = 1
-                    }
-                    dataField.splice(index, 1);
-                    dataField.splice(index, 0, temp);
-                    setDataField([...dataField]);
-                }}>
-                    {el.type === "SQ.ft" ? <option selected value="SQ.ft">SQ.ft</option>:<option value="SQ.ft">SQ.ft</option>}
-                    {el.type === "Rn.ft" ? <option selected value="Rn.ft">Rn.ft</option>:<option value="Rn.ft">Rn.ft</option>}
-                    {el.type === "Lumsum" ? <option selected value="Lumsum">Lumsum</option>:<option value="Lumsum">Lumsum</option>}
-                    {el.type === "-" ? <option selected value="nope">-</option>:<option value="nope">-</option>}
+                <select
+                    className="type-field"
+                    onChange={(evt) => {
+                        let temp = { ...dataField[index] };
+                        temp.type = evt.target.value;
+                        if (evt.target.value === "Lumsum") {
+                            temp.mrate = 0;
+                            temp.lrate = 0;
+                            temp.total = 1;
+                        }
+                        dataField.splice(index, 1);
+                        dataField.splice(index, 0, temp);
+                        setDataField([...dataField]);
+                    }}
+                >
+                    {el.type === "SQ.ft" ? (
+                        <option selected value="SQ.ft">
+                            SQ.ft
+                        </option>
+                    ) : (
+                        <option value="SQ.ft">SQ.ft</option>
+                    )}
+                    {el.type === "Rn.ft" ? (
+                        <option selected value="Rn.ft">
+                            Rn.ft
+                        </option>
+                    ) : (
+                        <option value="Rn.ft">Rn.ft</option>
+                    )}
+                    {el.type === "Lumsum" ? (
+                        <option selected value="Lumsum">
+                            Lumsum
+                        </option>
+                    ) : (
+                        <option value="Lumsum">Lumsum</option>
+                    )}
+                    {el.type === "-" ? (
+                        <option selected value="nope">
+                            -
+                        </option>
+                    ) : (
+                        <option value="nope">-</option>
+                    )}
                 </select>
             </td>
             <td>
@@ -179,7 +203,7 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                         temp.mrate = Number(evt.target.value);
                         const total = Number(temp.qty) * (Number(evt.target.value) + Number(temp.lrate));
                         temp.total = total;
-                        temp.amountDue = total - temp.cpaid;
+                        temp.amountDue = total - Number(temp.cpaid);
                         dataField.splice(index, 1);
                         dataField.splice(index, 0, temp);
                         setDataField([...dataField]);
@@ -190,16 +214,13 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                 <input
                     className="lrate-field"
                     value={el.lrate}
-                    type="number"
                     disabled={el.type === "Lumsum" ? true : false}
-
-                    min="0"
                     onChange={(evt) => {
                         let temp = { ...dataField[index] };
                         temp.lrate = Number(evt.target.value);
                         const total = Number(temp.qty) * (Number(evt.target.value) + Number(temp.mrate));
                         temp.total = total;
-                        temp.amountDue = total - temp.cpaid;
+                        temp.amountDue = total - Number(temp.cpaid);
                         dataField.splice(index, 1);
                         dataField.splice(index, 0, temp);
                         setDataField([...dataField]);
@@ -210,11 +231,10 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                 <input
                     className="t-field"
                     value={el.cpaid}
-                    type="number"
                     onChange={(evt) => {
                         let temp = { ...dataField[index] };
                         temp.cpaid = Number(evt.target.value);
-                        temp.amountDue = temp.total - Number(evt.target.value);
+                        temp.amountDue = Number(temp.total) - Number(evt.target.value);
                         dataField.splice(index, 1);
                         dataField.splice(index, 0, temp);
                         setDataField([...dataField]);
@@ -222,14 +242,18 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                 />
             </td>
             <td>
-                <input className="t-field" value={el.total} type="number" onChange={(evt) => {
+                <input
+                    className="t-field"
+                    value={el.total}
+                    onChange={(evt) => {
                         let temp = { ...dataField[index] };
                         temp.total = Number(evt.target.value);
-                        temp.amountDue = Number(evt.target.value) - temp.cpaid;
+                        temp.amountDue = Number(evt.target.value) - Number(temp.cpaid);
                         dataField.splice(index, 1);
                         dataField.splice(index, 0, temp);
                         setDataField([...dataField]);
-                    }} />
+                    }}
+                />
             </td>
         </tr>
     );

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Check, Edit, UserCheck, X } from "react-feather";
-import { Link } from "react-router-dom";
 import { Client } from "../API/Client";
 
 export default function ClientView({ clients, selectedView, setSelectView }) {
@@ -21,7 +20,7 @@ export default function ClientView({ clients, selectedView, setSelectView }) {
                 temp[index].sitename = client.sitename;
                 return setState({ ...state, clients: [...temp] });
             }
-            const res = await Client.updateClient({
+            await Client.updateClient({
                 clientname: client.clientName,
                 sitename: client.sitename,
                 id: cid,
@@ -32,14 +31,15 @@ export default function ClientView({ clients, selectedView, setSelectView }) {
             temp[index].sitename = client.sitename;
             setState({ ...state, clients: [...temp] });
         } catch (error) {
-            console.log(error);
+            alert(error);
+            // alert("Something went wrong!\nCHECK LOGS FOR ERROR!");
         }
     };
 
     const deleteThisClient = async (index, cid) => {
         if (window.confirm("Are you sure want to delete this client?")) {
             try {
-                const res = await Client.deleteClient({ id: cid });
+                await Client.deleteClient({ id: cid });
                 let temp = [...state.clients];
                 temp.splice(index, 1);
                 setState({ ...state, clients: [...temp] });
@@ -52,9 +52,9 @@ export default function ClientView({ clients, selectedView, setSelectView }) {
     return (
         <div className="cont">
             <div className="add-new-row">
-                <div className="search">
+                {/* <div className="search">
                     <input type="text" className="search-field" placeholder="Client Name" />
-                </div>
+                </div> */}
                 <span
                     className="btn"
                     onClick={() => {
@@ -72,7 +72,7 @@ export default function ClientView({ clients, selectedView, setSelectView }) {
                             const element = temp[i];
                             temp2 = [...temp2, element];
                         }
-                        setClient({ ...client,clientName: "", sitename: "" });
+                        setClient({ ...client, clientName: "", sitename: "" });
                         setState({ ...state, clients: [...temp2] });
                     }}
                 >
@@ -105,7 +105,12 @@ export default function ClientView({ clients, selectedView, setSelectView }) {
                                 />
                             </div>
                         )}
-                        <div className="avtar">
+                        <div
+                            className="avtar"
+                            onClick={() => {
+                                if (element.cid !== "new") setSelectView({ view: "BACK", id: element.cid });
+                            }}
+                        >
                             <div className="circle">
                                 <div className="icon-svg">
                                     <UserCheck size="28" />
@@ -148,7 +153,7 @@ export default function ClientView({ clients, selectedView, setSelectView }) {
                                     )}
                                     {element.editView && (
                                         <Check
-                                            style={{ color: "green" }}
+                                            style={{ color: "green", marginLeft: "-5px" }}
                                             size="22"
                                             onClick={() => {
                                                 let temp = state.clients;

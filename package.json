@@ -26,6 +26,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-feather": "^2.0.9",
+    "react-hot-keys": "^2.6.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "sqlite3": "^5.0.2",
@@ -37,7 +38,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "elec-start": "electron .",
+    "elec-start": "npm run build && electron .",
     "elec-build": "npm run build && electron-builder ",
     "elec-react": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps"
@@ -62,19 +63,11 @@
   },
   "build": {
     "appId": "com.finest.app",
-    "compression": "normal",
+    "compression": "maximum",
     "files": [
-      "build/**/*",
       "data/**/*",
       "node_modules/**/*"
-    ],
-    "directories": {
-      "buildResources": "data"
-    },
-    "extraFiles": {
-      "from": "build",
-      "to": "build"
-    }
+    ]
   },
   "devDependencies": {
     "electron": "^12.0.0",

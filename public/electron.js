@@ -69,7 +69,8 @@ function createWindow() {
         protocol: "file:",
         slashes: true,
     });
-    mainWindow.removeMenu();
+    // // mainWindow.removeMenu();
+    // mainWindow.webContents.openDevTools();
     mainWindow.loadURL(startUrl);
 }
 

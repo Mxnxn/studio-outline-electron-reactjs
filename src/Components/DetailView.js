@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { ArrowLeft, Bookmark, FileText, Plus, RotateCw } from "react-feather";
-import { Link } from "react-router-dom";
 import { Category } from "../API/Category";
 import { Subcategory } from "../API/Subcategory";
 import { Product } from "../API/Product";
@@ -8,7 +7,7 @@ import { Entry } from "../API/Entry";
 import EntryTable from "./EntryTable";
 import { Client } from "../API/Client";
 import { exportExcel } from "../API/Export";
-
+import Hotkeys from "react-hot-keys";
 const DetailView = ({ selectView, setSelectView }) => {
     const [state, setState] = useState({
         stopLoading: false,
@@ -33,10 +32,10 @@ const DetailView = ({ selectView, setSelectView }) => {
         mrate: 1,
         lrate: 1,
         qty: 1,
-        type:"",
-        cpaid: 1,
+        type: "",
+        cpaid: 0,
         total: 1,
-        amountDue: 0,
+        amountDue: 1,
         delete: false,
     };
 
@@ -57,6 +56,7 @@ const DetailView = ({ selectView, setSelectView }) => {
             });
             setAddedDataField([...entries.data]);
         } catch (error) {}
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -116,7 +116,7 @@ const DetailView = ({ selectView, setSelectView }) => {
                 catid: element.catid,
                 subcatid: element.subcatid ? element.subcatid : "",
                 product: element.description,
-                qty:element.qty,
+                qty: element.qty,
                 type: element.type,
                 cpaid: element.cpaid,
                 total: element.total,
@@ -213,42 +213,56 @@ const DetailView = ({ selectView, setSelectView }) => {
         }
     };
 
+    const onKeyDown = (keyName, e, handle) => {
+        console.log(keyName);
+        if (keyName === "ctrl+s") {
+            saveTheseRows();
+        }
+        if (keyName === "ctrl+d") {
+            setDataField([...dataField, { ...blankRow }]);
+        }
+        if (keyName === "ctrl+e") {
+            exportToExcel();
+        }
+    };
+
     return (
         state.stopLoading && (
             <div className="App">
-                <div className="sidebar">
-                    <div
-                        className="square"
-                        onClick={() => {
-                            setSelectView({ id: undefined, view: "FRONT" });
-                        }}
-                    >
-                        <ArrowLeft />
-                    </div>
-                    <div className="dbs topf" onClick={() => window.location.reload()}>
-                        <RotateCw />
-                    </div>
-                    <div className="dbs" style={{ marginTop: "auto" }} onClick={saveTheseRows}>
-                        <Bookmark />
-                    </div>
-                    <div className="dbs topf" onClick={exportToExcel}>
-                        <FileText />
-                    </div>
-                </div>
-                <div className="cont">
-                    <div className="title-row">
-                        <h1>Information</h1>
-                    </div>
-                    <div className="data-row">
-                        <div className="client-block">
-                            <span className="heading">CLIENT</span>
-                            <h2>{state.client.clientname}</h2>
+                <Hotkeys keyName="ctrl+s,ctrl+d,ctrl+e" onKeyDown={onKeyDown}>
+                    <div className="sidebar">
+                        <div
+                            className="square"
+                            onClick={() => {
+                                setSelectView({ id: undefined, view: "FRONT" });
+                            }}
+                        >
+                            <ArrowLeft />
                         </div>
-                        <div className="date-block">
-                            <span className="heading">SITE</span>
-                            <h2>{state.client.sitename}</h2>
+                        <div className="dbs topf" onClick={() => window.location.reload()}>
+                            <RotateCw />
                         </div>
-                        {/* <div className="date-block">
+                        <div className="dbs" style={{ marginTop: "auto" }} onClick={saveTheseRows}>
+                            <Bookmark />
+                        </div>
+                        <div className="dbs topf" onClick={exportToExcel}>
+                            <FileText />
+                        </div>
+                    </div>
+                    <div className="cont">
+                        <div className="title-row">
+                            <h1>Information</h1>
+                        </div>
+                        <div className="data-row">
+                            <div className="client-block">
+                                <span className="heading">CLIENT</span>
+                                <h2>{state.client.clientname}</h2>
+                            </div>
+                            <div className="date-block">
+                                <span className="heading">SITE</span>
+                                <h2>{state.client.sitename}</h2>
+                            </div>
+                            {/* <div className="date-block">
                         <div className="column ">
                             <span className="heading">DATE</span>
                             {edit ? (
@@ -264,42 +278,43 @@ const DetailView = ({ selectView, setSelectView }) => {
                             )}
                         </div>
                     </div> */}
-                    </div>
-                    <div className="data-row"></div>
-                    {addedDataField.length !== 0 && (
-                        <>
-                            <div className="title-row">
-                                <h1>Added Entry</h1>
-                            </div>
-                            <div className="data-rowx">
-                                <EntryTable
-                                    state={state}
-                                    dataField={addedDataField}
-                                    setDataField={setAddedDataField}
-                                    saved={true}
-                                />
+                        </div>
+                        <div className="data-row"></div>
+                        {addedDataField.length !== 0 && (
+                            <>
+                                <div className="title-row">
+                                    <h1>Added Entry</h1>
+                                </div>
+                                <div className="data-rowx">
+                                    <EntryTable
+                                        state={state}
+                                        dataField={addedDataField}
+                                        setDataField={setAddedDataField}
+                                        saved={true}
+                                    />
 
-                                <span className="add-row save" onClick={updateExistingRows}>
-                                    Update
-                                </span>
-                            </div>
-                        </>
-                    )}
-                    <div className="title-row">
-                        <h1>Entry</h1>
+                                    <span className="add-row save" onClick={updateExistingRows}>
+                                        Update
+                                    </span>
+                                </div>
+                            </>
+                        )}
+                        <div className="title-row">
+                            <h1>Entry</h1>
+                        </div>
+                        <div className="data-rowx">
+                            <EntryTable state={state} dataField={dataField} setDataField={setDataField} />
+                            <span
+                                className="add-row"
+                                onClick={() => {
+                                    setDataField([...dataField, blankRow]);
+                                }}
+                            >
+                                <Plus size="18" />
+                            </span>
+                        </div>
                     </div>
-                    <div className="data-rowx">
-                        <EntryTable state={state} dataField={dataField} setDataField={setDataField} />
-                        <span
-                            className="add-row"
-                            onClick={() => {
-                                setDataField([...dataField, blankRow]);
-                            }}
-                        >
-                            <Plus size="18" />
-                        </span>
-                    </div>
-                </div>
+                </Hotkeys>
             </div>
         )
     );

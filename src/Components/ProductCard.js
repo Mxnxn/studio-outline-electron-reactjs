@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Trash } from "react-feather";
 import { Product } from "../API/Product";
 import Pagination from "./Pagination";
+import useKeyPress from "./useKeyPress";
 const ProductCard = (props) => {
     const [pageOfProduct, setPageOfProduct] = useState({
         currentPage: 1,
@@ -32,6 +33,7 @@ const ProductCard = (props) => {
                 setState({ ...state, products: [...res.data], copyOfProducts: [...res.data], stopLoading: true });
             }
         } catch (error) {}
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -40,8 +42,21 @@ const ProductCard = (props) => {
         return () => {};
     }, [getProducts]);
 
+    const keyPress = useKeyPress("Enter");
+
+    useEffect(() => {
+        if (keyPress && state.inputValues.pname) {
+            addProduct();
+        }
+
+        return () => {};
+    });
+
     const addProduct = async () => {
         try {
+            if (!state.inputValues.pname) {
+                alert("Please Enter Productname!");
+            }
             const res = await Product.addProduct({
                 productname: state.inputValues.pname.charAt(0).toUpperCase() + state.inputValues.pname.slice(1),
                 lrate: state.inputValues.lrate,

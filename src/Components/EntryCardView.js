@@ -3,6 +3,7 @@ import { Trash } from "react-feather";
 import { Category } from "../API/Category";
 import { Subcategory } from "../API/Subcategory";
 import Pagination from "./Pagination";
+import useKeyPress from "./useKeyPress";
 
 export default function EntryCardView({ name }) {
     const initState = { subName: "", catName: "" };
@@ -53,6 +54,7 @@ export default function EntryCardView({ name }) {
         } catch (error) {
             console.log(error);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -60,6 +62,19 @@ export default function EntryCardView({ name }) {
 
         return () => {};
     }, [getAddedValues]);
+
+    const keyPress = useKeyPress("Enter");
+
+    useEffect(() => {
+        if (keyPress && state.inputValues.catName) {
+            addCategory();
+        }
+        if (keyPress && state.inputValues.subName) {
+            addSubcategory();
+        }
+
+        return () => {};
+    });
 
     const addCategory = async () => {
         if (!state.inputValues.catName) {
@@ -229,7 +244,11 @@ export default function EntryCardView({ name }) {
                                     <td>{index + 1}</td>
                                     <td>{el.catname}</td>
                                     <td>
-                                        <button onClick={()=>{deleteCategory(el.catid)}}>
+                                        <button
+                                            onClick={() => {
+                                                deleteCategory(el.catid);
+                                            }}
+                                        >
                                             <Trash size="12" />
                                         </button>
                                     </td>

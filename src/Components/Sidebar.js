@@ -1,5 +1,5 @@
 import React from "react";
-import { Database, RotateCw, Settings, Users } from "react-feather";
+import { Database, LogOut, RotateCw, Settings, Users } from "react-feather";
 
 export default function Sidebar({ setView, view }) {
     return (
@@ -30,8 +30,15 @@ export default function Sidebar({ setView, view }) {
             >
                 <RotateCw />
             </div>
-            <div className="square" style={{ marginTop: "auto" }}>
-                <Settings />
+            <div
+                className="square"
+                style={{ marginTop: "auto" }}
+                onClick={() => {
+                    localStorage.removeItem("flag");
+                    window.location.reload();
+                }}
+            >
+                <LogOut />
             </div>
         </div>
     );
