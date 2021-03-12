@@ -16,10 +16,55 @@ body {
     // background: #e2f3f5;
     display: flex;
     flex-direction: row;
-
+    position: relative;
     background-color: #f1dfd1;
     background-color: #ffffff;
     background-image: linear-gradient(135deg, #ffffff 0%, #d7e1ec 15%);
+}
+
+.titlebar {
+    position: absolute;
+    right: 0;
+    display: flex;
+    width: 100vw;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+    z-index: 100;
+    justify-content: flex-end;
+}
+
+.cls-btn {
+    border-radius: 50px;
+    height: 18px;
+    width: 18px;
+    margin: 5px;
+    -webkit-app-region: no-drag;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ff5c5c;
+    border: 1px solid #e33e41;
+    cursor: pointer;
+    z-index: 101;
+
+    outline: none;
+}
+
+.min-btn {
+    background: #ffbd4c;
+    border-radius: 50px;
+    height: 18px;
+    width: 18px;
+    -webkit-app-region: no-drag;
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 101;
+    outline: none;
+
+    border: 1px solid #e09e3e;
 }
 
 .sidebar {
@@ -363,11 +408,10 @@ body {
         display: flex;
         flex-direction: row;
         padding-left: 2rem;
-        padding-top: 20px;
+        padding-top: 30px;
         padding-right: 20px;
         font-weight: 600;
         color: white;
-        cursor: pointer;
 
         .search {
             .search-field {
@@ -399,6 +443,7 @@ body {
             height: 30px;
             background: #364f6b;
             font-family: "Roboto Condensed", sans-serif;
+            cursor: pointer;
 
             display: flex;
             border-radius: 20px;

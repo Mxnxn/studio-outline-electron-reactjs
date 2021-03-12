@@ -17,31 +17,29 @@ const Auth = ({ selectView, setSelectView }) => {
     };
 
     return (
-        <div className="App">
-            <div className="cont">
-                <div className="wrapper">
-                    <div className="box">
-                        <span>Studio Outline</span>
-                        {state.status && <span className="wrong">{state.status}</span>}
+        <div className="cont">
+            <div className="wrapper">
+                <div className="box">
+                    <span>Studio Outline</span>
+                    {state.status && <span className="wrong">{state.status}</span>}
 
-                        <input
-                            type="text"
-                            onChange={(evt) => {
-                                setState({ ...state, uname: evt.target.value });
-                            }}
-                            value={state.uname}
-                            placeholder="Username"
-                        />
-                        <input
-                            type="password"
-                            onChange={(evt) => {
-                                setState({ ...state, password: evt.target.value });
-                            }}
-                            value={state.password}
-                            placeholder="Password"
-                        />
-                        <button onClick={check}>LOGIN</button>
-                    </div>
+                    <input
+                        type="text"
+                        onChange={(evt) => {
+                            setState({ ...state, uname: evt.target.value });
+                        }}
+                        value={state.uname}
+                        placeholder="Username"
+                    />
+                    <input
+                        type="password"
+                        onChange={(evt) => {
+                            setState({ ...state, password: evt.target.value });
+                        }}
+                        value={state.password}
+                        placeholder="Password"
+                    />
+                    <button onClick={check}>LOGIN</button>
                 </div>
             </div>
         </div>

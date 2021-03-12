@@ -228,7 +228,7 @@ const DetailView = ({ selectView, setSelectView }) => {
 
     return (
         state.stopLoading && (
-            <div className="App">
+            <>
                 <Hotkeys keyName="ctrl+s,ctrl+d,ctrl+e" onKeyDown={onKeyDown}>
                     <div className="sidebar">
                         <div
@@ -315,7 +315,7 @@ const DetailView = ({ selectView, setSelectView }) => {
                         </div>
                     </div>
                 </Hotkeys>
-            </div>
+            </>
         )
     );
 };

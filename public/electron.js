@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, remote } = require("electron");
 const Tables = require("../data/tables");
 const express = require("express")();
 const bodyParser = require("body-parser");
@@ -32,6 +32,8 @@ express.use(cors());
 express.use(bodyParser.urlencoded({ extended: false }));
 express.use(bodyParser.json());
 
+let mainWindow;
+
 express.get("/test", (req, res) => {
     return res.status(200).json({ message: "Test" });
 });
@@ -48,27 +50,38 @@ express.use("/entry", EntryRoute);
 express.use("/category", CategoryRoute);
 express.use("/Subcategory", SubcategoryRoute);
 express.use("/product", ProductRoute);
+express.get("/exit", (req, res) => {
+    mainWindow.close();
+    return res.status(200).json({ code: 200, message: "Exited" });
+});
+express.get("/minimize", (req, res) => {
+    mainWindow.minimize();
+    return res.status(200).json({ code: 200, message: "Exited" });
+});
 
 const server = express.listen(3001, () => {
     console.log("Server has started on 3001");
 });
 // to close server
 function createWindow() {
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 1440,
         height: 860,
         resizable: false,
+        frame: false,
         webPreferences: {
+            enableRemoteModule: true,
             nodeIntegration: true,
-            contextIsolation: true,
         },
     });
+    console.log(__dirname);
     createTables();
-    let startUrl = url.format({
-        pathname: path.join(__dirname, "../build/index.html"),
-        protocol: "file:",
-        slashes: true,
-    });
+    let startUrl = "http://localhost:3000/";
+    // url.format({
+    //     pathname: path.join(__dirname, "../build/index.html"),
+    //     protocol: "file:",
+    //     slashes: true,
+    // });
     // // mainWindow.removeMenu();
     // mainWindow.webContents.openDevTools();
     mainWindow.loadURL(startUrl);

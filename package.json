@@ -38,6 +38,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "elec": "electron .",
     "elec-start": "npm run build && electron .",
     "elec-build": "npm run build && electron-builder ",
     "elec-react": "concurrently \"npm start\" \"wait-on http://localhost:3000 && electron .\"",

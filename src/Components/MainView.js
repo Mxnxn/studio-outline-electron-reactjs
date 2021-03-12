@@ -33,13 +33,13 @@ const MainView = ({ selectView, setSelectView }) => {
     }, [getAllClient]);
 
     return (
-        <div className="App">
+        <>
             <Sidebar view={view} setView={setView} />
             {view.selectedView === "CLIENT" && state.stopLoading && (
                 <ClientView selectView={selectView} setSelectView={setSelectView} clients={state.clients} />
             )}
             {view.selectedView === "DATABASE" && <DatabaseView />}
-        </div>
+        </>
     );
 };
 
