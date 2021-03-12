@@ -76,12 +76,11 @@ function createWindow() {
     });
     console.log(__dirname);
     createTables();
-    let startUrl = "http://localhost:3000/";
-    // url.format({
-    //     pathname: path.join(__dirname, "../build/index.html"),
-    //     protocol: "file:",
-    //     slashes: true,
-    // });
+    let startUrl = url.format({
+        pathname: path.join(__dirname, "../build/index.html"),
+        protocol: "file:",
+        slashes: true,
+    });
     // // mainWindow.removeMenu();
     // mainWindow.webContents.openDevTools();
     mainWindow.loadURL(startUrl);

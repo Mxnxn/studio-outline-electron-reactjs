@@ -64,7 +64,7 @@
   },
   "build": {
     "appId": "com.finest.app",
-    "compression": "maximum",
+    "compression": "normal",
     "files": [
       "data/**/*",
       "node_modules/**/*"
