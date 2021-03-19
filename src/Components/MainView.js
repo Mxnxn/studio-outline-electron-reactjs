@@ -3,8 +3,9 @@ import ClientView from "./ClientView";
 import DatabaseView from "./DatabaseView";
 import Sidebar from "./Sidebar";
 import { Client } from "../API/Client";
-
-const MainView = ({ selectView, setSelectView }) => {
+import Toast from "./Toast";
+import anime from "animejs";
+const MainView = ({ selectView, setSelectView, setToast }) => {
     const [view, setView] = useState({
         selectedView: localStorage.getItem("view") ? localStorage.getItem("view") : "CLIENT",
     });
@@ -36,7 +37,12 @@ const MainView = ({ selectView, setSelectView }) => {
         <>
             <Sidebar view={view} setView={setView} />
             {view.selectedView === "CLIENT" && state.stopLoading && (
-                <ClientView selectView={selectView} setSelectView={setSelectView} clients={state.clients} />
+                <ClientView
+                    selectView={selectView}
+                    setSelectView={setSelectView}
+                    clients={state.clients}
+                    setToast={setToast}
+                />
             )}
             {view.selectedView === "DATABASE" && <DatabaseView />}
         </>

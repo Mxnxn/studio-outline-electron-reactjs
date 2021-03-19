@@ -13,6 +13,18 @@ class ClientAPI {
         });
     }
 
+    addDetail(formData) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const res = await axios.post(`${process.env.REACT_APP_API_URL}/client/details`, formData);
+                if (!res.data.message) throw res.data;
+                resolve(res.data);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
     updateClient(formData) {
         return new Promise(async (resolve, reject) => {
             try {

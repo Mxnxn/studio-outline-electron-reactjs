@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ArrowLeft, Bookmark, FileText, Plus, RotateCw } from "react-feather";
+import { ArrowLeft, Bookmark, Check, FileText, Plus, RotateCw, Save, Square } from "react-feather";
 import { Category } from "../API/Category";
 import { Subcategory } from "../API/Subcategory";
 import { Product } from "../API/Product";
@@ -8,12 +8,14 @@ import EntryTable from "./EntryTable";
 import { Client } from "../API/Client";
 import { exportExcel } from "../API/Export";
 import Hotkeys from "react-hot-keys";
-const DetailView = ({ selectView, setSelectView }) => {
+import Toast from "./Toast";
+const DetailView = ({ selectView, setSelectView, setToast }) => {
     const [state, setState] = useState({
         stopLoading: false,
         categories: [],
         subcategories: [],
         products: [],
+        url: { value: "", edit: false },
         cid: selectView.id,
         saved: false,
     });
@@ -21,7 +23,7 @@ const DetailView = ({ selectView, setSelectView }) => {
     const [addedDataField, setAddedDataField] = useState([]);
     const [dataField, setDataField] = useState([]);
 
-    const blankRow = {
+    const [blankRow, setBlankField] = useState({
         eid: 1,
         cid: selectView.id,
         catid: "",
@@ -32,12 +34,12 @@ const DetailView = ({ selectView, setSelectView }) => {
         mrate: 1,
         lrate: 1,
         qty: 1,
-        type: "",
+        type: "SQ.ft",
         cpaid: 0,
         total: 1,
         amountDue: 1,
         delete: false,
-    };
+    });
 
     const getEverything = useCallback(async () => {
         try {
@@ -53,6 +55,7 @@ const DetailView = ({ selectView, setSelectView }) => {
                 products: [...prods.data],
                 stopLoading: true,
                 client: { ...client.data },
+                url: { edit: false, value: client.data.url },
             });
             setAddedDataField([...entries.data]);
         } catch (error) {}
@@ -67,11 +70,17 @@ const DetailView = ({ selectView, setSelectView }) => {
 
     const saveTheseRows = async () => {
         if (dataField.length === 0) {
-            return alert("Add 1 row atleast to save!");
+            setToast({ message: "Add a entry to save!!!", type: "danger", isVisible: true });
         }
         for (let i = 0; i < dataField.length; i++) {
-            if (!dataField[i].catname || !dataField[i].catid || !dataField[i].description) {
-                alert("Please dont leave Product/Category field Empty");
+            if (
+                !dataField[i].catname ||
+                !dataField[i].catid ||
+                !dataField[i].description ||
+                !dataField[i].subcatname ||
+                !dataField[i].subcatid
+            ) {
+                setToast({ message: "Please delete empty rows!!", type: "danger", isVisible: true });
                 i = dataField.length;
                 return null;
             }
@@ -79,6 +88,7 @@ const DetailView = ({ selectView, setSelectView }) => {
         let temp = [];
         for (let i = 0; i < dataField.length; i++) {
             const element = dataField[i];
+            console.log(element.type);
             const res = await Entry.addEntry({
                 cid: element.cid,
                 catid: element.catid,
@@ -95,7 +105,7 @@ const DetailView = ({ selectView, setSelectView }) => {
             if (i === dataField.length - 1 && res.message) {
                 setDataField([]);
                 setAddedDataField([...addedDataField, ...temp]);
-                alert("Successfully SAVED!!!");
+                setToast({ message: "Successfully Saved!", type: "success", isVisible: true });
             }
         }
     };
@@ -103,7 +113,7 @@ const DetailView = ({ selectView, setSelectView }) => {
     const updateExistingRows = async () => {
         for (let i = 0; i < addedDataField.length; i++) {
             if (!addedDataField[i].catname || !addedDataField[i].catid || !addedDataField[i].description) {
-                alert("Please dont leave Product/Category field Empty");
+                setToast({ message: "Don't leave fields empty!!!", type: "danger", isVisible: true });
                 i = addedDataField.length;
                 return null;
             }
@@ -124,17 +134,17 @@ const DetailView = ({ selectView, setSelectView }) => {
                 lrate: element.lrate,
             });
             if (i === addedDataField.length - 1 && res.message) {
-                alert("Successfully UPDATED!!!");
+                setToast({ message: "Successfully updated!!", type: "danger", isVisible: true });
             }
         }
     };
 
     const exportToExcel = async () => {
         if (dataField.length !== 0) {
-            return alert("Kindly, Save your work!");
+            return setToast({ message: "Kindly Save Your Work!", type: "danger", isVisible: true });
         }
         if (addedDataField.length === 0) {
-            return alert("Kindly, add some entries and save it to generate Excel sheet.");
+            return setToast({ message: "Add Some entries to export!!", type: "danger", isVisible: true });
         }
         let rowWithSubCat = [];
         for (let index = 0; index < addedDataField.length; index++) {
@@ -200,15 +210,15 @@ const DetailView = ({ selectView, setSelectView }) => {
                 rows: rowWithSubCat,
             });
             if (res.code === "SUCCESS") {
-                alert(`Successfully generated!\nPath: ${res.path} `);
+                setToast({ message: "Successfully Exported", type: "Success", isVisible: true });
             }
         } catch (error) {
             console.log(error.code);
             if (error.code === "BUSY") {
-                return alert("Please close sheet to overwrite!!");
+                return setToast({ message: "Please close sheet to overwrite!!", type: "danger", isVisible: true });
             }
             if (error.code === "INTERNAL") {
-                return alert("Something went wrong!");
+                return setToast({ message: "Something went wrong!", type: "danger", isVisible: true });
             }
         }
     };
@@ -223,6 +233,16 @@ const DetailView = ({ selectView, setSelectView }) => {
         }
         if (keyName === "ctrl+e") {
             exportToExcel();
+        }
+    };
+
+    const urlChanger = async (evt) => {
+        try {
+            await Client.addDetail({ cid: state.cid, url: state.url.value });
+            setToast({ message: "Project Url has been updated!!", type: "success", isVisible: true });
+            setState({ ...state, url: { ...state.url, edit: false } });
+        } catch (err) {
+            setToast({ message: "Something went wrong!!", type: "danger", isVisible: true });
         }
     };
 
@@ -263,47 +283,75 @@ const DetailView = ({ selectView, setSelectView }) => {
                                 <h2>{state.client.sitename}</h2>
                             </div>
                             {/* <div className="date-block">
-                        <div className="column ">
-                            <span className="heading">DATE</span>
-                            {edit ? (
-                                <input
-                                    onMouseLeave={() => setEdit(false)}
-                                    className="date-field"
-                                    type="date"
-                                    onChange={(e) => console.log(e)}
-                                    value="2020-02-22"
-                                />
-                            ) : (
-                                <h2 onDoubleClick={() => setEdit(true)}>22/02/2020</h2>
-                            )}
-                        </div>
-                    </div> */}
+                                <span className="heading">PROJECT ZIP</span>
+                                <div style={{ display: "flex" }}>
+                                    <input
+                                        className="url-field"
+                                        placeholder={`"http://google.com/"`}
+                                        value={state.client.url}
+                                        onChange={() => {}}
+                                    />
+                                    <button className="check-btn">
+                                        <Check />
+                                    </button>
+                                </div>
+                            </div> */}
+                            <div className="date-block">
+                                <div className="column ">
+                                    <span className="heading">Date</span>
+                                    {state.url.edit ? (
+                                        <div style={{ display: "flex", alignItems: "center" }}>
+                                            <input
+                                                style={{
+                                                    borderRadius: "8px",
+                                                    border: "1px solid #28213b",
+                                                    marginTop: "6px",
+                                                }}
+                                                className="date-field"
+                                                onChange={(evt) => {
+                                                    setState({
+                                                        ...state,
+                                                        url: { ...state.url, value: evt.target.value },
+                                                    });
+                                                }}
+                                                value={state.url.value}
+                                                placeholder={`"https://localhost"`}
+                                            />
+                                            <button
+                                                style={{ height: 30, width: 30 }}
+                                                className="check-btn"
+                                                onClick={() => urlChanger()}
+                                            >
+                                                <Check />
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <h2
+                                            onDoubleClick={() =>
+                                                setState({ ...state, url: { ...state.url, edit: true } })
+                                            }
+                                            style={{ cursor: "pointer" }}
+                                        >
+                                            {state.url.value ? state.url.value : "No Url Found"}
+                                        </h2>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                         <div className="data-row"></div>
-                        {addedDataField.length !== 0 && (
-                            <>
-                                <div className="title-row">
-                                    <h1>Added Entry</h1>
-                                </div>
-                                <div className="data-rowx">
-                                    <EntryTable
-                                        state={state}
-                                        dataField={addedDataField}
-                                        setDataField={setAddedDataField}
-                                        saved={true}
-                                    />
 
-                                    <span className="add-row save" onClick={updateExistingRows}>
-                                        Update
-                                    </span>
-                                </div>
-                            </>
-                        )}
                         <div className="title-row">
-                            <h1>Entry</h1>
+                            <h1>Add Entries</h1>
                         </div>
                         <div className="data-rowx">
-                            <EntryTable state={state} dataField={dataField} setDataField={setDataField} />
+                            <EntryTable
+                                state={state}
+                                dataField={dataField}
+                                setDataField={setDataField}
+                                saved={false}
+                                setBlankField={setBlankField}
+                                blankRow={blankRow}
+                            />
                             <span
                                 className="add-row"
                                 onClick={() => {
@@ -313,6 +361,27 @@ const DetailView = ({ selectView, setSelectView }) => {
                                 <Plus size="18" />
                             </span>
                         </div>
+                        {addedDataField.length !== 0 && (
+                            <>
+                                <div className="title-row">
+                                    <h1>Saved Entries</h1>
+                                </div>
+                                <div className="data-rowx">
+                                    <EntryTable
+                                        state={state}
+                                        dataField={addedDataField}
+                                        setDataField={setAddedDataField}
+                                        saved={true}
+                                        setBlankField={setBlankField}
+                                        blankRow={blankRow}
+                                    />
+
+                                    {/* <span className="add-row save" onClick={updateExistingRows}>
+                                        Update
+                                    </span> */}
+                                </div>
+                            </>
+                        )}
                     </div>
                 </Hotkeys>
             </>

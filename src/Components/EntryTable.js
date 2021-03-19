@@ -1,7 +1,7 @@
 import React from "react";
 import EntryRow from "./EntryRow";
 
-const EntryTable = ({ dataField, setDataField, state, saved }) => {
+const EntryTable = ({ dataField, setDataField, state, saved, setBlankField, blankRow }) => {
     return (
         <table className="table">
             {dataField.length !== 0 && (
@@ -27,6 +27,8 @@ const EntryTable = ({ dataField, setDataField, state, saved }) => {
                         dataField={dataField}
                         setDataField={setDataField}
                         saved={saved}
+                        setBlankField={setBlankField}
+                        blankRow={blankRow}
                     />
                 ))}
             </tbody>

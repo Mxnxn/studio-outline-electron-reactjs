@@ -26,6 +26,33 @@ app.post("/add", async (req, res) => {
     }
 });
 
+app.post("/details", async (req, res) => {
+    try {
+        if (!req.body.cid || !req.body.url) {
+            return res.status(400).json({
+                message: "Invalid Request",
+                status: false,
+            });
+        }
+        const data = await Client.getDetails(req.body.cid);
+        if (data[0]) {
+            await Client.updateDetails(req.body.cid, req.body.url);
+            return res.status(200).json({ message: "Successfully updated!" });
+        }
+        await Client.addDetails({
+            cid: req.body.cid,
+            url: req.body.url,
+        });
+        return res.status(200).json({ message: "Successfully added!" });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: error.message,
+            status: false,
+        });
+    }
+});
+
 app.get("/get/:cid", async (req, res) => {
     try {
         if (!req.params.cid) {

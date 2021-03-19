@@ -1,4 +1,4 @@
-const { app, BrowserWindow, remote } = require("electron");
+const { app, BrowserWindow } = require("electron");
 const Tables = require("../data/tables");
 const express = require("express")();
 const bodyParser = require("body-parser");
@@ -18,12 +18,12 @@ log4js.configure({
             filename: `./logs/api.log`,
             layout: { type: "basic" },
             compress: true,
-            daysToKeep: 14,
+            daysToKeep: 2,
             keepFileExt: true,
         },
     },
     categories: {
-        default: { appenders: ["console", "dateFile"], level: "info" },
+        default: { appenders: ["console", "dateFile"], level: "error" },
     },
 });
 let logger = log4js.getLogger();
@@ -70,7 +70,6 @@ function createWindow() {
         resizable: false,
         frame: false,
         webPreferences: {
-            enableRemoteModule: true,
             nodeIntegration: true,
         },
     });
@@ -83,7 +82,9 @@ function createWindow() {
     });
     // // mainWindow.removeMenu();
     // mainWindow.webContents.openDevTools();
+    mainWindow.focus();
     mainWindow.loadURL(startUrl);
+    mainWindow.focus();
 }
 
 const createTables = () => {
@@ -92,6 +93,7 @@ const createTables = () => {
     Tables.createProduct();
     Tables.createEntry();
     Tables.createSubcategory();
+    Tables.createClientDetails();
 };
 
 app.whenReady().then(() => {

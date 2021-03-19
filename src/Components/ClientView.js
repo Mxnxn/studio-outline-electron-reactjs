@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Check, Edit, UserCheck, X } from "react-feather";
 import { Client } from "../API/Client";
-
-export default function ClientView({ clients, selectedView, setSelectView }) {
+import DeleteModal from "./DeleteModal";
+export default function ClientView({ clients, selectedView, setSelectView, setToast }) {
     const [state, setState] = useState({ clients: [...clients], copyClients: [...clients] });
-    const [client, setClient] = useState({ clientName: "", sitename: "" });
+    const [client, setClient] = useState({ clientName: "", sitename: "", cid: "", delete: false, index: "" });
 
     const updateClient = async (index, cid) => {
         console.log(index, cid);
@@ -18,6 +18,7 @@ export default function ClientView({ clients, selectedView, setSelectView }) {
                 temp[index].cid = res.data;
                 temp[index].clientname = client.clientName;
                 temp[index].sitename = client.sitename;
+                setToast({ isVisible: true, message: "New Client Added!", type: "success" });
                 return setState({ ...state, clients: [...temp] });
             }
             await Client.updateClient({
@@ -30,31 +31,39 @@ export default function ClientView({ clients, selectedView, setSelectView }) {
             temp[index].clientname = client.clientName;
             temp[index].sitename = client.sitename;
             setState({ ...state, clients: [...temp] });
+            setToast({ isVisible: true, message: "Details Updated Successfully!", type: "success" });
         } catch (error) {
             alert(error);
+            setToast({ isVisible: true, message: "Something went wrong!", type: "danger" });
             // alert("Something went wrong!\nCHECK LOGS FOR ERROR!");
         }
     };
 
-    const deleteThisClient = async (index, cid) => {
-        if (window.confirm("Are you sure want to delete this client?")) {
-            try {
-                await Client.deleteClient({ id: cid });
-                let temp = [...state.clients];
-                temp.splice(index, 1);
-                setState({ ...state, clients: [...temp] });
-            } catch (error) {
-                console.log(error);
-            }
+    const deleteThisClient = async () => {
+        try {
+            await Client.deleteClient({ id: client.cid });
+            let temp = [...state.clients];
+            temp.splice(client.index, 1);
+            setState({ ...state, clients: [...temp] });
+            setToast({ isVisible: true, message: "Client Deleted successfully!", type: "danger" });
+            setClient({ clientName: "", sitename: "", cid: "", delete: false, index: "" });
+        } catch (error) {
+            setToast({ isVisible: true, message: "Something went wrong while deleting!", type: "danger" });
         }
+    };
+
+    const close = () => {
+        setClient({ clientName: "", sitename: "", cid: "", delete: false, index: "" });
     };
 
     return (
         <div className="cont">
+            <DeleteModal close={close} isVisible={client.delete} submit={deleteThisClient} title="Delete Client" />
             <div className="add-new-row">
                 {/* <div className="search">
                     <input type="text" className="search-field" placeholder="Client Name" />
                 </div> */}
+
                 <span
                     className="btn"
                     onClick={() => {
@@ -100,7 +109,8 @@ export default function ClientView({ clients, selectedView, setSelectView }) {
                                 <X
                                     size="12"
                                     onClick={() => {
-                                        deleteThisClient(index, element.cid);
+                                        // deleteThisClient(index, element.cid);
+                                        setClient({ ...client, delete: true, cid: element.cid, index: index });
                                     }}
                                 />
                             </div>

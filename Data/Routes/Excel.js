@@ -25,15 +25,18 @@ app.post("/generate", async (req, res) => {
             let category = req.body.rows[index];
             total += category.total;
             cpaid += category.cpaid;
-            Obj.createCategory(row, category);
-            row += 2;
-
+            Obj.createCategory(row, category, true);
+            row += 1;
+            Obj.createRowForBlankOther(row);
+            row += 1;
             for (let sindex = 0; sindex < category.subcategories.length; sindex++) {
                 let subcat = category.subcategories[sindex];
-                if (subcat.subcatname === "OTHERS" || subcat.subcatname === "Others") {
-                    Obj.createRowForOthers(row);
+                if (subcat.subcatname == "OTHERS" && category.catname == "CARPENTARY WORK") {
+                    console.log(row);
+                    Obj.createRowForOthers(row, sindex + 1);
                     row += 1;
-                } else {
+                } else if (subcat.subcatname != "OTHERS") {
+                    console.log(row);
                     Obj.createSubcategory(row, { ...subcat, index: sindex + 1 });
                     row += 1;
                 }
@@ -42,15 +45,16 @@ app.post("/generate", async (req, res) => {
                     Obj.addEntry(row, { ...entry, index: eindex + 1 });
                     row += 1;
                     if (eindex === subcat.entries.length - 1) {
+                        Obj.createRowForBlankOther(row);
                         row += 1;
                     }
                 }
             }
             endRow = row;
         }
-        Obj.createCategory(endRow, { catname: "TOTAL:", cpaid: cpaid, total: total });
+        Obj.createCategory(endRow, { catname: "TOTAL:", cpaid: cpaid, total: total }, true);
         endRow += 1;
-        Obj.createCategory(endRow, { catname: "NOTE:", cpaid: "", total: "" }, true);
+        Obj.longNoteSingleRow(endRow, "NOTE:", true);
         Obj.longNotesWithIndex(
             endRow + 1,
             { value: "Estimate will be vary on the selection basis that might be a 10% variation", index: "1)" },

@@ -1,8 +1,8 @@
 import React from "react";
-import { X } from "react-feather";
+import { Check, X } from "react-feather";
 import { Entry } from "../API/Entry";
 
-const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
+const EntryRow = ({ state, dataField, setDataField, el, index, saved, setBlankField, blankRow }) => {
     return (
         <tr key={index}>
             <td
@@ -23,24 +23,54 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                 }}
             >
                 {el.delete ? (
-                    <span
-                        onClick={async () => {
-                            let temp = [...dataField];
-                            if (window.confirm("Are you sure?")) {
+                    <>
+                        <span
+                            onClick={async () => {
                                 if (saved) {
-                                    await Entry.deleteEntry(el.eid);
+                                    let temp = [...dataField];
+                                    if (window.confirm("Are you sure?")) {
+                                        await Entry.deleteEntry(el.eid);
+                                        temp.splice(index, 1);
+                                        setDataField(temp);
+                                        return null;
+                                    }
+                                } else {
+                                    let temp = [...dataField];
                                     temp.splice(index, 1);
                                     setDataField(temp);
-                                    return null;
                                 }
-                                temp.splice(index, 1);
-                                setDataField(temp);
-                            }
-                        }}
-                        style={{ display: "flex", marginRight: "auto" }}
-                    >
-                        <X size="18" style={{ color: "red" }} />
-                    </span>
+                            }}
+                            style={{ display: "flex", marginRight: "auto", cursor: "pointer" }}
+                        >
+                            <X size="18" style={{ color: "red" }} />
+                        </span>
+                        {saved && (
+                            <span
+                                style={{ display: "flex" }}
+                                onClick={async () => {
+                                    try {
+                                        await Entry.updateEntry({
+                                            eid: el.eid,
+                                            cid: el.cid,
+                                            catid: el.catid,
+                                            subcatid: el.subcatid ? el.subcatid : "",
+                                            product: el.description,
+                                            qty: el.qty,
+                                            type: el.type,
+                                            cpaid: el.cpaid,
+                                            total: el.total,
+                                            mrate: el.mrate,
+                                            lrate: el.lrate,
+                                        });
+                                    } catch (err) {
+                                        alert("Something went wrong");
+                                    }
+                                }}
+                            >
+                                <Check size="18" style={{ color: "green", cursor: "pointer" }} />
+                            </span>
+                        )}
+                    </>
                 ) : (
                     index + 1
                 )}
@@ -55,6 +85,11 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                         if (cat !== -1) {
                             temp.catid = state.categories[cat].catid;
                             temp.catname = state.categories[cat].catname;
+                            setBlankField({
+                                ...blankRow,
+                                catid: state.categories[cat].catid,
+                                catname: state.categories[cat].catname,
+                            });
                         }
                         dataField.splice(index, 1);
                         dataField.splice(index, 0, temp);
@@ -80,6 +115,11 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved }) => {
                         if (subc !== -1) {
                             temp.subcatid = state.subcategories[subc].subcatid;
                             temp.subcatname = state.subcategories[subc].subcatname;
+                            setBlankField({
+                                ...blankRow,
+                                subcatid: state.subcategories[subc].subcatid,
+                                subcatname: state.subcategories[subc].subcatname,
+                            });
                         }
                         dataField.splice(index, 1);
                         dataField.splice(index, 0, temp);

@@ -51,10 +51,22 @@ async function createEntry() {
         });
 }
 
+async function createClientDetails() {
+    if (!(await knex.schema.hasTable("details")))
+        await knex.schema.createTable("details", (table) => {
+            table.increments("eid");
+            table.integer("cid").references("cid").inTable("clients");
+            table.string("url");
+            table.string("phone");
+            table.string("address");
+        });
+}
+
 module.exports = {
     createCategory,
     createClient,
     createEntry,
     createProduct,
     createSubcategory,
+    createClientDetails,
 };

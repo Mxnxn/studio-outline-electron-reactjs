@@ -32,8 +32,8 @@ let chars = {
 const getDate = () => {
     let date = new Date();
     let yy = date.getFullYear();
-    let mm = date.getMonth() < 10 ? "0" + date.getMonth() + 1 : date.getMonth() + 1;
-    let dd = date.getDate() < 10 ? "0" + date.getDate() + 1 : date.getDate() + 1;
+    let mm = date.getMonth() < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+    let dd = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
 
     return `${dd}-${mm}-${yy}`;
 };
@@ -44,53 +44,54 @@ class DTE {
         this.workbook = new Excel.Workbook();
         this.worksheet = this.workbook.addWorksheet("ExampleSheet");
         this.createHeader(name, "", getDate());
-        this.createColumnHead(7);
-        // To Add blank space between rows
-        // this.addBlankRow(6);
-        // For Category
+        this.createColumnHead(6);
     }
 
     createLeftHeader() {
-        this.mergeCellWithBorder("A1", "J3", "center", `STUDIO OUTLINE`);
+        this.mergeCellWithBorder("A1", "I3", "left", `STUDIO OUTLINE`);
         this.worksheet.getCell("A1").font = {
             size: 36,
             bold: true,
         };
-        this.mergeCellWithBorder("A4", "J4", "center", `Email : outline891@gmail.com`);
-        this.mergeCellWithBorder("A5", "J5", "center", `Phone : +91 8401527637`);
+        this.mergeCellWithBorder("A4", "I4", "left", `Email : outline891@gmail.com`);
+        this.mergeCellWithBorder("A5", "I5", "left", `Phone : +91 8401527637`);
     }
 
-    createHeader(name, address, cphone, date) {
+    createHeader(name, cphone, date) {
         this.createLeftHeader();
-        this.mergeCellWithBorder("K1", "Y1", "center", `QUOTATION`);
-        this.mergeCellWithBorder("K2", "Y2", "center", `Date : ${date}`);
-        this.mergeCellWithBorder("K3", "Y3", "center", `Name : ${name.clientname}`);
-        this.mergeCellWithBorder("K4", "Y4", "center", `Address :${name.sitename}`);
-        this.mergeCellWithBorder("K5", "Y5", "center", `Phone : ${cphone}`);
+        this.mergeCellWithBorder("J1", "S1", "left", `QUOTATION`);
+        this.mergeCellWithBorder("J2", "S2", "left", `Date : ${date}`);
+        this.mergeCellWithBorder("J3", "S3", "left", `Name : ${name.clientname}`);
+        this.mergeCellWithBorder("J4", "S4", "left", `Address :${name.sitename}`);
+        this.mergeCellWithBorder("J5", "S5", "left", `Studio Outline GSTIN: 24ADDFS8077K1ZL`);
     }
 
     longNotesWithIndex(row, object) {
         this.singleCellWithBorderAndFill(`A${row}`, "left", object.index);
-        this.mergeCellWithBorderAndFill(`B${row}`, `Y${row}`, "left", object.value);
+        this.mergeCellWithBorderAndFill(`B${row}`, `S${row}`, "left", object.value);
+    }
+
+    longNoteSingleRow(row, value) {
+        this.mergeCellWithBorderAndFill(`A${row}`, `S${row}`, "left", value);
+        this.worksheet.getCell(`A${row}`).alignment = { vertical: "middle", horizontal: "left", wrapText: true };
     }
 
     longNotes(row, value) {
-        this.mergeCellWithBorderAndFill(`A${row}`, `Y${row + 2}`, "left", value);
+        this.mergeCellWithBorderAndFill(`A${row}`, `S${row + 2}`, "left", value);
         this.worksheet.getCell(`A${row}`).alignment = { vertical: "middle", horizontal: "left", wrapText: true };
     }
 
     createCategory(row, object, toAddBlankRow) {
         if (!toAddBlankRow) this.addBlankRow(row - 1);
-        this.mergeCellWithBorderAndFill(`A${row}`, `P${row}`, "left", object.catname);
-        this.mergeCellWithBorderAndFill(`Q${row}`, `R${row}`, "left", object.cpaid);
+        this.mergeCellWithBorderAndFill(`A${row}`, `M${row}`, "left", object.catname);
+        this.mergeCellWithBorderAndFill(`N${row}`, `O${row}`, "left", object.cpaid);
         this.mergeCellWithBorderAndFill(
-            `S${row}`,
-            `T${row}`,
+            `P${row}`,
+            `Q${row}`,
             "left",
             object.total === "" ? "" : object.total - object.cpaid
         );
-        this.mergeCellWithBorderAndFill(`U${row}`, `V${row}`, "left", object.total);
-        this.mergeCellWithBorderAndFill(`W${row}`, `Y${row}`, "left", "");
+        this.mergeCellWithBorderAndFill(`R${row}`, `S${row}`, "left", object.total);
         this.worksheet.getCell(`A${row}`).font = {
             size: 14,
             bold: true,
@@ -99,16 +100,15 @@ class DTE {
 
     createSubcategory(row, object) {
         this.singleCellWithBorderAndFill(`A${row}`, "left", object.index === "" ? "" : `${chars[object.index]})`, true);
-        this.mergeCellWithBorderAndFill(`B${row}`, `P${row}`, "left", object.subcatname);
-        this.mergeCellWithBorderAndFill(`Q${row}`, `R${row}`, "left", object.cpaid);
+        this.mergeCellWithBorderAndFill(`B${row}`, `M${row}`, "left", object.subcatname);
+        this.mergeCellWithBorderAndFill(`N${row}`, `O${row}`, "left", object.cpaid);
         this.mergeCellWithBorderAndFill(
-            `S${row}`,
-            `T${row}`,
+            `P${row}`,
+            `Q${row}`,
             "left",
             object.total === "" ? "" : object.total - object.cpaid
         );
-        this.mergeCellWithBorderAndFill(`U${row}`, `V${row}`, "left", object.total);
-        this.mergeCellWithBorderAndFill(`W${row}`, `Y${row}`, "left", "");
+        this.mergeCellWithBorderAndFill(`R${row}`, `S${row}`, "left", object.total);
         this.worksheet.getCell(`A${row}`).font = {
             size: 12,
             bold: true,
@@ -117,72 +117,90 @@ class DTE {
             size: 12,
             bold: true,
         };
-        this.worksheet.getCell(`Q${row}`).font = {
+        this.worksheet.getCell(`N${row}`).font = {
             size: 12,
             bold: true,
         };
-        this.worksheet.getCell(`S${row}`).font = {
+        this.worksheet.getCell(`P${row}`).font = {
             size: 12,
             bold: true,
         };
-        this.worksheet.getCell(`U${row}`).font = {
-            size: 12,
-            bold: true,
-        };
-        this.worksheet.getCell(`W${row}`).font = {
+        this.worksheet.getCell(`R${row}`).font = {
             size: 12,
             bold: true,
         };
     }
 
-    createRowForOthers(row, object) {
+    createRowForOthers(row, index) {
+        this.singleCellWithBorderAndFill(`A${row}`, "left", `${chars[index]})`, true);
+        this.mergeCellWithBorderAndFill(`B${row}`, `M${row}`, "left", "OTHERS");
+        this.mergeCellWithBorderAndFill(`N${row}`, `O${row}`, "left", "");
+        this.mergeCellWithBorderAndFill(`P${row}`, `Q${row}`, "left", "");
+        this.mergeCellWithBorderAndFill(`R${row}`, `S${row}`, "left", "");
+        this.worksheet.getCell(`A${row}`).font = {
+            size: 12,
+            bold: true,
+        };
+        this.worksheet.getCell(`B${row}`).font = {
+            size: 12,
+            bold: true,
+        };
+        this.worksheet.getCell(`N${row}`).font = {
+            size: 12,
+            bold: true,
+        };
+        this.worksheet.getCell(`P${row}`).font = {
+            size: 12,
+            bold: true,
+        };
+        this.worksheet.getCell(`R${row}`).font = {
+            size: 12,
+            bold: true,
+        };
+    }
+    createRowForBlankOther(row) {
         this.singleCellWithBorder(`A${row}`, "left", "", true);
-        this.mergeCellWithBorder(`B${row}`, `P${row}`, "left", "");
-        this.mergeCellWithBorder(`Q${row}`, `R${row}`, "left", "");
-        this.mergeCellWithBorder(`S${row}`, `T${row}`, "left", "");
-        this.mergeCellWithBorder(`U${row}`, `V${row}`, "left", "");
-        this.mergeCellWithBorder(`W${row}`, `Y${row}`, "left", "");
+        this.mergeCellWithBorder(`B${row}`, `M${row}`, "left", "");
+        this.mergeCellWithBorder(`N${row}`, `O${row}`, "left", "");
+        this.mergeCellWithBorder(`P${row}`, `Q${row}`, "left", "");
+        this.mergeCellWithBorder(`R${row}`, `S${row}`, "left", "");
     }
 
     addEntry(row, object) {
-        this.singleCellWithBorder(`A${row}`, "left", `${object.index}`, false);
-        this.mergeCellWithBorder(`B${row}`, `I${row}`, "left", object.description, false);
-        this.singleCellWithBorder(`J${row}`, "left", `${object.qty}`, false);
-        console.log(object.type);
-        this.mergeCellWithBorder(`K${row}`, `L${row}`, "left", `${object.type}`, false);
-        this.mergeCellWithBorder(`M${row}`, `N${row}`, "left", object.mrate === 0 ? "-" : object.mrate, false);
-        this.mergeCellWithBorder(`O${row}`, `P${row}`, "left", object.lrate === 0 ? "-" : object.lrate, false);
-        this.mergeCellWithBorder(`Q${row}`, `R${row}`, "left", object.cpaid, false);
-        this.mergeCellWithBorder(`S${row}`, `T${row}`, "left", object.total - object.cpaid, false);
-        this.mergeCellWithBorder(`U${row}`, `V${row}`, "left", object.total, false);
-        this.mergeCellWithBorder(`W${row}`, `Y${row}`, "left", "-", false);
+        this.singleCellWithBorder(`A${row}`, "left", Number(object.index), false);
+        this.mergeCellWithBorder(`B${row}`, `G${row}`, "left", object.description, false);
+        this.singleCellWithBorder(`H${row}`, "left", Number(object.qty), false);
+        this.singleCellWithBorder(`I${row}`, "left", `${object.type}`, false);
+        this.mergeCellWithBorder(`J${row}`, `K${row}`, "left", object.mrate === 0 ? "-" : object.mrate, false);
+        this.mergeCellWithBorder(`L${row}`, `M${row}`, "left", object.lrate === 0 ? "-" : object.lrate, false);
+        this.mergeCellWithBorder(`N${row}`, `O${row}`, "left", object.cpaid, false);
+        this.mergeCellWithBorder(`P${row}`, `Q${row}`, "left", object.total - object.cpaid, false);
+        this.mergeCellWithBorder(`R${row}`, `S${row}`, "left", object.total, false);
     }
 
     // Creates ColumnHead Rows
-    createColumnHead() {
-        this.singleCellWithBorder("A6", "left", "Sr", true);
-        this.mergeCellWithBorder("B6", "I6", "left", "Description", true);
-        this.singleCellWithBorder("J6", "left", "Qty", true);
-        this.mergeCellWithBorder("K6", "L6", "left", "Measurement Type", true);
-        this.mergeCellWithBorder("M6", "N6", "left", "Material Rate", true);
-        this.mergeCellWithBorder("O6", "P6", "left", "Labour Rate", true);
-        this.mergeCellWithBorder("Q6", "R6", "left", "Current Paid", true);
-        this.mergeCellWithBorder("S6", "T6", "left", "Due Amount", true);
-        this.mergeCellWithBorder("U6", "V6", "left", "Total", true);
-        this.mergeCellWithBorder("W6", "Y6", "left", "Notes", true);
+    createColumnHead(row) {
+        this.singleCellWithBorder(`A${row}`, "left", "Sr.", true);
+        this.mergeCellWithBorder(`B${row}`, `G${row}`, "left", "Description", true);
+        this.singleCellWithBorder(`H${row}`, "left", "Qty", true);
+        this.singleCellWithBorder(`I${row}`, "left", "Type", true);
+        this.mergeCellWithBorder(`J${row}`, `K${row}`, "left", "Material Rate", true);
+        this.mergeCellWithBorder(`L${row}`, `M${row}`, "left", "Labour Rate", true);
+        this.mergeCellWithBorder(`N${row}`, `O${row}`, "left", "Current Paid", true);
+        this.mergeCellWithBorder(`P${row}`, `Q${row}`, "left", "Due Amount", true);
+        this.mergeCellWithBorder(`R${row}`, `S${row}`, "left", "Total", true);
     }
 
     addBlankRow(row) {
         this.singleCellWithBorder(`A${row}`, "left", "");
-        this.mergeCellWithBorder(`B${row}`, `I${row}`, "left", "");
-        this.singleCellWithBorder(`J${row}`, "left", "");
-        this.mergeCellWithBorder(`K${row}`, `L${row}`, "left", "");
-        this.mergeCellWithBorder(`M${row}`, `N${row}`, "left", "");
-        this.mergeCellWithBorder(`O${row}`, `P${row}`, "left", "");
-        this.mergeCellWithBorder(`Q${row}`, `R${row}`, "left", "");
-        this.mergeCellWithBorder(`S${row}`, `T${row}`, "left", "");
-        this.mergeCellWithBorder(`U${row}`, `V${row}`, "left", "");
-        this.mergeCellWithBorder(`W${row}`, `Y${row}`, "left", "");
+        this.mergeCellWithBorder(`B${row}`, `G${row}`, "left", "");
+        this.singleCellWithBorder(`H${row}`, "left", "");
+        this.singleCellWithBorder(`I${row}`, "left", "");
+        this.mergeCellWithBorder(`J${row}`, `K${row}`, "left", "");
+        this.mergeCellWithBorder(`L${row}`, `M${row}`, "left", "");
+        this.mergeCellWithBorder(`N${row}`, `O${row}`, "left", "");
+        this.mergeCellWithBorder(`P${row}`, `Q${row}`, "left", "");
+        this.mergeCellWithBorder(`R${row}`, `S${row}`, "left", "");
     }
 
     singleCellWithBorder(cell, align, value, bold) {

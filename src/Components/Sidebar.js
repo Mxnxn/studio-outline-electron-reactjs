@@ -1,5 +1,5 @@
 import React from "react";
-import { Database, LogOut, RotateCw, Settings, Users } from "react-feather";
+import { Database, LogOut, RotateCw, Users } from "react-feather";
 
 export default function Sidebar({ setView, view }) {
     return (
@@ -30,6 +30,7 @@ export default function Sidebar({ setView, view }) {
             >
                 <RotateCw />
             </div>
+
             <div
                 className="square"
                 style={{ marginTop: "auto" }}
