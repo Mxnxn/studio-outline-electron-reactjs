@@ -4,6 +4,7 @@ const { getLogger } = require("log4js");
 // const logger = getLogger("dataFile");
 const path = require("path");
 const { shell } = require("electron");
+
 app.use("/*", (req, res, next) => next());
 
 app.get("/test", (req, res) => {
@@ -32,11 +33,9 @@ app.post("/generate", async (req, res) => {
             for (let sindex = 0; sindex < category.subcategories.length; sindex++) {
                 let subcat = category.subcategories[sindex];
                 if (subcat.subcatname == "OTHERS" && category.catname == "CARPENTARY WORK") {
-                    console.log(row);
                     Obj.createRowForOthers(row, sindex + 1);
                     row += 1;
                 } else if (subcat.subcatname != "OTHERS") {
-                    console.log(row);
                     Obj.createSubcategory(row, { ...subcat, index: sindex + 1 });
                     row += 1;
                 }
@@ -84,11 +83,13 @@ app.post("/generate", async (req, res) => {
             // logger.error(" /excel/generate EXCEL FILE IS BUSY!");
             return res.status(500).json({ code: "BUSY", message: "Please close sheet to overwrite!!" });
         }
-        shell.showItemInFolder(path.join(__dirname, `../exports/`));
+        await shell.showItemInFolder(
+            path.join(__dirname, `../../exports/${req.body.clientname}_${req.body.sitename}.xlsx`)
+        );
         return res.status(200).json({
             code: "SUCCESS",
             message: "DONE",
-            path: path.join(__dirname, `../exports/${req.body.clientname}_${req.body.sitename}.xlsx`),
+            path: path.join(__dirname, `../../exports/${req.body.clientname}_${req.body.sitename}.xlsx`),
         });
     } catch (error) {
         console.log(error);

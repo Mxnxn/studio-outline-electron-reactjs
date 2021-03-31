@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ArrowLeft, Bookmark, Check, FileText, Plus, RotateCw, Save, Square } from "react-feather";
+import { ArrowLeft, Bookmark, Check, FileText, Plus, RotateCw } from "react-feather";
 import { Category } from "../API/Category";
 import { Subcategory } from "../API/Subcategory";
 import { Product } from "../API/Product";
@@ -8,7 +8,6 @@ import EntryTable from "./EntryTable";
 import { Client } from "../API/Client";
 import { exportExcel } from "../API/Export";
 import Hotkeys from "react-hot-keys";
-import Toast from "./Toast";
 const DetailView = ({ selectView, setSelectView, setToast }) => {
     const [state, setState] = useState({
         stopLoading: false,
@@ -367,6 +366,9 @@ const DetailView = ({ selectView, setSelectView, setToast }) => {
                                     <h1>Saved Entries</h1>
                                 </div>
                                 <div className="data-rowx">
+                                    <span className="add-row save" onClick={updateExistingRows}>
+                                        Update
+                                    </span>
                                     <EntryTable
                                         state={state}
                                         dataField={addedDataField}
@@ -375,10 +377,6 @@ const DetailView = ({ selectView, setSelectView, setToast }) => {
                                         setBlankField={setBlankField}
                                         blankRow={blankRow}
                                     />
-
-                                    {/* <span className="add-row save" onClick={updateExistingRows}>
-                                        Update
-                                    </span> */}
                                 </div>
                             </>
                         )}

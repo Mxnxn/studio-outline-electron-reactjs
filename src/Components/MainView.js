@@ -5,6 +5,9 @@ import Sidebar from "./Sidebar";
 import { Client } from "../API/Client";
 import Toast from "./Toast";
 import anime from "animejs";
+import OfferSection from "./OfferSection";
+import AppointmentSection from "./AppointmentSection";
+
 const MainView = ({ selectView, setSelectView, setToast }) => {
     const [view, setView] = useState({
         selectedView: localStorage.getItem("view") ? localStorage.getItem("view") : "CLIENT",
@@ -45,6 +48,8 @@ const MainView = ({ selectView, setSelectView, setToast }) => {
                 />
             )}
             {view.selectedView === "DATABASE" && <DatabaseView />}
+            {view.selectedView === "OFFER" && <OfferSection loading={true} />}
+            {view.selectedView === "APPOINTMENT" && <AppointmentSection loading={true} />}
         </>
     );
 };

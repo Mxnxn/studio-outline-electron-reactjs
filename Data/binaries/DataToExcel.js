@@ -43,6 +43,7 @@ class DTE {
         console.log("[+] Generating Excelsheet Has Started!");
         this.workbook = new Excel.Workbook();
         this.worksheet = this.workbook.addWorksheet("ExampleSheet");
+        this.worksheet.views = [{}];
         this.createHeader(name, "", getDate());
         this.createColumnHead(6);
     }
@@ -93,6 +94,18 @@ class DTE {
         );
         this.mergeCellWithBorderAndFill(`R${row}`, `S${row}`, "left", object.total);
         this.worksheet.getCell(`A${row}`).font = {
+            size: 14,
+            bold: true,
+        };
+        this.worksheet.getCell(`N${row}`).font = {
+            size: 14,
+            bold: true,
+        };
+        this.worksheet.getCell(`P${row}`).font = {
+            size: 14,
+            bold: true,
+        };
+        this.worksheet.getCell(`R${row}`).font = {
             size: 14,
             bold: true,
         };
@@ -168,7 +181,12 @@ class DTE {
 
     addEntry(row, object) {
         this.singleCellWithBorder(`A${row}`, "left", Number(object.index), false);
+        if (object.description.length > 60) {
+            // this.worksheet.getCell(`B${row}`).alignment = { wrapText: true };
+            // this.worksheet.properties.defaultRowHeight = 15;
+        }
         this.mergeCellWithBorder(`B${row}`, `G${row}`, "left", object.description, false);
+
         this.singleCellWithBorder(`H${row}`, "left", Number(object.qty), false);
         this.singleCellWithBorder(`I${row}`, "left", `${object.type}`, false);
         this.mergeCellWithBorder(`J${row}`, `K${row}`, "left", object.mrate === 0 ? "-" : object.mrate, false);

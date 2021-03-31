@@ -4,11 +4,7 @@ app.use("/*", (req, res, next) => next());
 app.post("/add", async (req, res) => {
     try {
         console.log(req.body);
-        if (
-            !req.body.cid ||
-            !req.body.catid ||
-            !req.body.product 
-        ) {
+        if (!req.body.cid || !req.body.catid || !req.body.product) {
             return res.status(400).json({
                 message: "Invalid Request",
                 status: false,
@@ -19,8 +15,8 @@ app.post("/add", async (req, res) => {
             catid: req.body.catid,
             subcatid: req.body.subcatid ? req.body.subcatid : null,
             description: req.body.product,
-            qty:req.body.qty,
-            type:req.body.type,
+            qty: req.body.qty,
+            type: req.body.type,
 
             mrate: req.body.mrate,
             lrate: req.body.lrate,
@@ -100,12 +96,7 @@ app.delete("/delete/:id", async (req, res) => {
 
 app.post("/update", async (req, res) => {
     try {
-        if (
-            !req.body.eid ||
-            !req.body.cid ||
-            !req.body.catid ||
-            !req.body.product 
-        ) {
+        if (!req.body.eid || !req.body.cid || !req.body.catid || !req.body.product) {
             return res.status(400).json({
                 message: "Invalid Request",
                 status: false,
@@ -115,8 +106,8 @@ app.post("/update", async (req, res) => {
             cid: req.body.cid,
             catid: req.body.catid,
             subcatid: req.body.subcatid ? req.body.subcatid : null,
-            description: req.body.description,
-            qty:req.body.qty,
+            description: req.body.product,
+            qty: req.body.qty,
             type: req.body.type,
             mrate: req.body.mrate,
             lrate: req.body.lrate,

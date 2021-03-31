@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Check, Edit, UserCheck, X } from "react-feather";
 import { Client } from "../API/Client";
 import DeleteModal from "./DeleteModal";
+import useKeyPress from "./useKeyPress";
 export default function ClientView({ clients, selectedView, setSelectView, setToast }) {
     const [state, setState] = useState({ clients: [...clients], copyClients: [...clients] });
     const [client, setClient] = useState({ clientName: "", sitename: "", cid: "", delete: false, index: "" });
@@ -18,7 +19,11 @@ export default function ClientView({ clients, selectedView, setSelectView, setTo
                 temp[index].cid = res.data;
                 temp[index].clientname = client.clientName;
                 temp[index].sitename = client.sitename;
+                temp[index].editMode = false;
+                temp[index].editView = false;
                 setToast({ isVisible: true, message: "New Client Added!", type: "success" });
+                setClient({ clientName: "", sitename: "", cid: "", delete: false, index: "" });
+                index = null;
                 return setState({ ...state, clients: [...temp] });
             }
             await Client.updateClient({
@@ -30,7 +35,11 @@ export default function ClientView({ clients, selectedView, setSelectView, setTo
             console.log(temp);
             temp[index].clientname = client.clientName;
             temp[index].sitename = client.sitename;
+            temp[index].editMode = false;
+            temp[index].editView = false;
+            index = null;
             setState({ ...state, clients: [...temp] });
+            setClient({ clientName: "", sitename: "", cid: "", delete: false, index: "" });
             setToast({ isVisible: true, message: "Details Updated Successfully!", type: "success" });
         } catch (error) {
             alert(error);
@@ -55,6 +64,22 @@ export default function ClientView({ clients, selectedView, setSelectView, setTo
     const close = () => {
         setClient({ clientName: "", sitename: "", cid: "", delete: false, index: "" });
     };
+
+    const keyPress = useKeyPress("Enter");
+
+    useEffect(() => {
+        let index = state.clients.findIndex((el) => el.cid === "new");
+        if (keyPress) {
+            if (index && client.clientName !== "" && client.sitename !== "") {
+                return;
+            }
+            updateClient(index, "new");
+            index = null;
+        }
+
+        return (index = null);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [keyPress]);
 
     return (
         <div className="cont">

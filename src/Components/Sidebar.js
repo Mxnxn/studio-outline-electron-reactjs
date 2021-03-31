@@ -1,11 +1,11 @@
 import React from "react";
-import { Database, LogOut, RotateCw, Users } from "react-feather";
+import { Database, FilePlus, LogOut, RotateCw, Users } from "react-feather";
 
 export default function Sidebar({ setView, view }) {
     return (
         <div className="sidebar">
             <div
-                className={view.selectedView === "DATABASE" ? "dbs" : "users"}
+                className={view.selectedView === "CLIENT" ? "users" : "dbs"}
                 onClick={() => {
                     setView({ selectedView: "CLIENT" });
                     localStorage.setItem("view", "CLIENT");
@@ -21,6 +21,22 @@ export default function Sidebar({ setView, view }) {
                 }}
             >
                 <Database />
+            </div>
+            <div
+                className={view.selectedView === "OFFER" ? "users topf" : "dbs topf"}
+                onClick={() => {
+                    setView({ selectedView: "OFFER" });
+                }}
+            >
+                <FilePlus />
+            </div>
+            <div
+                className={view.selectedView === "APPOINTMENT" ? "users topf" : "dbs topf"}
+                onClick={() => {
+                    setView({ selectedView: "APPOINTMENT" });
+                }}
+            >
+                <FilePlus />
             </div>
             <div
                 className={"dbs topf"}

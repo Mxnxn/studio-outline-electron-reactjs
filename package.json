@@ -7,6 +7,7 @@
   "description": "Fin'est is estimator for architects and interior designers",
   "main": "build/electron.js",
   "dependencies": {
+    "@react-pdf/renderer": "^1.6.14",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.7.2",
@@ -22,6 +23,7 @@
     "express-logging": "^1.1.1",
     "history": "^5.0.0",
     "knex": "^0.21.18",
+    "libreoffice-convert": "^1.3.2",
     "log4js": "^6.3.0",
     "node-sass": "^5.0.0",
     "react": "^17.0.1",

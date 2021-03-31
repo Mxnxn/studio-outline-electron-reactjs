@@ -225,6 +225,26 @@ body {
     }
 }
 
+.mr-2 {
+    margin-right: 12px;
+}
+
+.input-field {
+    background: white;
+    padding: 5px;
+    height: 20px;
+    width: 200px;
+    font-family: "Roboto Condensed", sans-serif;
+    font-size: 14px;
+    color: #28313b;
+    border: 1px solid #28313b;
+    border-radius: 6px;
+    margin-top: 6px;
+    &:focus {
+        outline: none;
+    }
+}
+
 .cont {
     width: calc(100vw - 80px);
     height: 100vh;
@@ -345,18 +365,18 @@ body {
                     }
 
                     .desc-field {
-                        max-width: 300px !important;
-                        width: 300px !important;
+                        max-width: 360px !important;
+                        width: 360px !important;
                     }
 
                     .cat-field {
-                        max-width: 150px !important;
-                        width: 150px !important;
+                        max-width: 170px !important;
+                        width: 170px !important;
                     }
 
                     .subcat-field {
-                        max-width: 270px;
-                        width: 270px !important;
+                        max-width: 220px;
+                        width: 220px !important;
                     }
 
                     .mrate-field,
@@ -372,9 +392,9 @@ body {
                     }
 
                     .qty-field {
-                        max-width: 35px;
+                        max-width: 70px;
                         margin-right: 5px;
-                        width: 35px !important;
+                        width: 70px !important;
                     }
 
                     .type-field {
@@ -562,6 +582,16 @@ body {
             -moz-box-shadow: 2px 5px 21px 2px rgba(192, 192, 192, 0.88);
         }
     }
+}
+
+.letter-cont {
+    padding-top: 1.5rem;
+    padding-left: 2rem;
+    height: 70vh;
+    width: 60vw;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
 }
 
 .main-cont {
@@ -884,6 +914,30 @@ body {
                 transform: scale(0.9);
             }
         }
+    }
+}
+
+.gen-btn {
+    margin-top: 6px;
+    height: 30px;
+    width: 100px;
+    font-family: "Roboto Condensed", sans-serif;
+    font-weight: 700;
+    color: white;
+    border-radius: 6px;
+    border: 1px solid #28313b;
+    background: rgb(40, 49, 59);
+    transition: 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0px 5px 20px 2px rgb(136, 136, 136);
+    -webkit-box-shadow: 0px 5px 20px 2px rgba(150, 150, 150, 1);
+    -moz-box-shadow: 0px 5px 20px 2px rgba(150, 150, 150, 1);
+    &:hover {
+        background: rgba(40, 49, 59, 0.8);
+    }
+
+    &:focus {
+        outline: none;
     }
 }
 
