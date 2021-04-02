@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Check, X } from "react-feather";
 import { Entry } from "../API/Entry";
 
 const EntryRow = ({ state, dataField, setDataField, el, index, saved, setBlankField, blankRow }) => {
+    const ref = useRef(null);
+    const qtyRef = useRef(null);
     return (
         <tr key={index}>
             <td
@@ -144,6 +146,7 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved, setBlankFi
                     className="desc-field"
                     placeholder="Type.."
                     type="text"
+                    ref={ref}
                     value={el.description}
                     onChange={(evt) => {
                         let temp = { ...dataField[index] };
@@ -174,6 +177,7 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved, setBlankFi
                     className="qty-field"
                     value={el.qty}
                     type="number"
+                    ref={qtyRef}
                     onChange={(evt) => {
                         let temp = { ...dataField[index] };
                         temp.qty = Number(evt.target.value);
@@ -193,9 +197,14 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved, setBlankFi
                         let temp = { ...dataField[index] };
                         temp.type = evt.target.value;
                         if (evt.target.value === "Lumsum") {
+                            console.log(temp);
                             temp.mrate = 0;
                             temp.lrate = 0;
+                            temp.description = "";
                             temp.total = 1;
+                            ref.current.focus();
+                        } else {
+                            qtyRef.current.focus();
                         }
                         dataField.splice(index, 1);
                         dataField.splice(index, 0, temp);
@@ -222,13 +231,6 @@ const EntryRow = ({ state, dataField, setDataField, el, index, saved, setBlankFi
                         </option>
                     ) : (
                         <option value="Lumsum">Lumsum</option>
-                    )}
-                    {el.type === "-" ? (
-                        <option selected value="nope">
-                            -
-                        </option>
-                    ) : (
-                        <option value="nope">-</option>
                     )}
                 </select>
             </td>

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import AppointmentLetter from "./Template/AppointmentLetter";
 import OfferLetter from "./Template/OfferLetter";
 
 const OfferSection = ({ loading }) => {

@@ -3,8 +3,6 @@ import ClientView from "./ClientView";
 import DatabaseView from "./DatabaseView";
 import Sidebar from "./Sidebar";
 import { Client } from "../API/Client";
-import Toast from "./Toast";
-import anime from "animejs";
 import OfferSection from "./OfferSection";
 import AppointmentSection from "./AppointmentSection";
 

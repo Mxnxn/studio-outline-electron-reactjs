@@ -27,7 +27,7 @@ Font.register({
     src: require("../font/OSR.ttf").default,
 });
 
-const AppointmentLetter = ({ loading }) => {
+const AppointmentLetter = ({ loading, state }) => {
     const styles = StyleSheet.create({
         page: {
             display: "flex",
@@ -128,7 +128,7 @@ const AppointmentLetter = ({ loading }) => {
             width: "100%",
             fontFamily: "Nunito Bold",
             fontSize: 16,
-            marginTop: 20,
+            marginTop: 12,
             display: "flex",
             alignItems: "center",
         },
@@ -153,20 +153,22 @@ const AppointmentLetter = ({ loading }) => {
                                 <View style={{ display: "flex", flexDirection: "row" }}>
                                     <View>
                                         <Text style={styles.bodyToText}>To,</Text>
-                                        <Text style={styles.bodyToText}>Mr. MINESH PATEL,</Text>
-                                        <Text style={styles.bodyToText}>PATWA ESTATE,</Text>
-                                        <Text style={styles.bodyToText}>B/H BOMBAY SHOPPING CENTRE,</Text>
-                                        <Text style={styles.bodyToText}>ALKAPURI,</Text>
-                                        <Text style={styles.bodyToText}>VADODARA.</Text>
+                                        <Text style={styles.bodyToText}>{state.name}</Text>
+                                        {state.arrayOfAddress.map((addr, index) => (
+                                            <Text style={styles.bodyToText}>
+                                                {addr}
+                                                {index === state.arrayOfAddress.length - 1 ? "." : ","}
+                                            </Text>
+                                        ))}
                                     </View>
                                     <View style={{ marginLeft: "auto" }}>
-                                        <Text style={styles.bodyToText}>11.11.1998</Text>
+                                        <Text style={styles.bodyToText}>{state.date}</Text>
                                     </View>
                                 </View>
                             </View>
-                            <View style={{ ...styles.headName }}>
+                            <View style={{ ...styles.headName, marginBottom: 12 }}>
                                 <Text style={styles.letterNameText}>
-                                    Our design consultancy services which include the following:
+                                    Our Design Consultancy Services Which Include The Following
                                 </Text>
                             </View>
                             <View style={styles.bodyView}>
@@ -198,61 +200,44 @@ const AppointmentLetter = ({ loading }) => {
                                 </Text>
                                 <Text style={styles.bodyText}> • Selection of soft furnishings and art work.</Text>
 
-                                <Text style={styles.bodyText}>• Site analysis that duly accounts for the context.</Text>
-                                <Text style={styles.bodyText}> • Conceptualization.</Text>
+                                <View style={{ ...styles.bodyCatView, marginVertical: 7 }}>
+                                    <Text style={{ ...styles.bodyCat, fontSize: 16 }}>Payment Schedule:</Text>
+                                </View>
                                 <Text style={styles.bodyText}>
-                                    • Translation of concepts into an executable design.
+                                    The professional{" "}
+                                    <Text style={{ fontFamily: "Opensans", textDecoration: "underline" }}>
+                                        consultation fees for planning and interior designing and generating drawings,
+                                        sourcing of material & etc
+                                    </Text>{" "}
+                                    would be charge on lumsum basis i.e.{" "}
+                                    <Text style={{ fontFamily: "Opensans", textDecoration: "underline" }}>
+                                        Rs. {state.amount}
+                                    </Text>{" "}
+                                    to be paid.
                                 </Text>
-                                <Text style={styles.bodyText}>
-                                    • Consistent interaction and co-ordination for perfect on-site execution.
+                                <View style={{ marginVertical: 6 }}></View>
+                                <Text style={{ ...styles.bodyText, color: "red", fontFamily: "Opensans" }}>
+                                    Total workable Area ={" "}
+                                    <Text style={{ textDecoration: "underline" }}>{state.totalSqft} sq.</Text>{" "}
+                                    Approximate
                                 </Text>
-                                <Text style={styles.bodyText}> • Site analysis with contextual references.</Text>
-                                <Text style={styles.bodyText}>
-                                    • Conversion of concept into executable designs through development of execution
-                                    drawings.
+                                <View style={{ marginVertical: 6 }}></View>
+                                <Text style={{ ...styles.bodyText, fontSize: 8 }}>Note:</Text>
+                                <Text style={{ ...styles.bodyText, fontSize: 8 }}>
+                                    1. Site visit will be periodic as per req.
                                 </Text>
-                                <Text style={styles.bodyText}>
-                                    • Selection of contractors and other labour agencies.
+                                <Text style={{ ...styles.bodyText, fontSize: 8 }}>
+                                    2. Fees once paid will not be refundable.
                                 </Text>
-                                <Text style={styles.bodyText}>
-                                    • Interaction and co-ordination with site managers and agencies to ensure work is
-                                    executed as Per designs.
+                                <View style={{ marginVertical: 6 }}></View>
+                                <Text style={{ ...styles.bodyText, fontSize: 8 }}>Thank you. Regards,</Text>
+                                <Text
+                                    style={{ ...styles.bodyText, fontFamily: "Opensans", fontSize: 16, marginTop: 12 }}
+                                >
+                                    Studio Outline,
                                 </Text>
-                                <Text style={styles.bodyText}>
-                                    • Ensuring quality of workmanship is maintained on site.
-                                </Text>
-                                <Text style={styles.bodyText}>
-                                    • Selection of materials, fittings and hardware etc...
-                                </Text>
-                                <Text style={styles.bodyText}> • Selection of soft furnishings and art work.</Text>
-
-                                <Text style={styles.bodyText}>• Site analysis that duly accounts for the context.</Text>
-                                <Text style={styles.bodyText}> • Conceptualization.</Text>
-                                <Text style={styles.bodyText}>
-                                    • Translation of concepts into an executable design.
-                                </Text>
-                                <Text style={styles.bodyText}>
-                                    • Consistent interaction and co-ordination for perfect on-site execution.
-                                </Text>
-                                <Text style={styles.bodyText}> • Site analysis with contextual references.</Text>
-                                <Text style={styles.bodyText}>
-                                    • Conversion of concept into executable designs through development of execution
-                                    drawings.
-                                </Text>
-                                <Text style={styles.bodyText}>
-                                    • Selection of contractors and other labour agencies.
-                                </Text>
-                                <Text style={styles.bodyText}>
-                                    • Interaction and co-ordination with site managers and agencies to ensure work is
-                                    executed as Per designs.
-                                </Text>
-                                <Text style={styles.bodyText}>
-                                    • Ensuring quality of workmanship is maintained on site.
-                                </Text>
-                                <Text style={styles.bodyText}>
-                                    • Selection of materials, fittings and hardware etc...
-                                </Text>
-                                <Text style={styles.bodyText}> • Selection of soft furnishings and art work.</Text>
+                                <Text style={{ ...styles.bodyText }}>Trupesh Purohit</Text>
+                                <Text style={{ ...styles.bodyText }}>Ruchita Mehta</Text>
                             </View>
                             <View
                                 style={{

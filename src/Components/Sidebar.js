@@ -1,5 +1,5 @@
 import React from "react";
-import { Database, FilePlus, LogOut, RotateCw, Users } from "react-feather";
+import { Database, FilePlus, FileText, LogOut, RotateCw, Users } from "react-feather";
 
 export default function Sidebar({ setView, view }) {
     return (
@@ -17,18 +17,9 @@ export default function Sidebar({ setView, view }) {
                 className={view.selectedView === "DATABASE" ? "users topf" : "dbs topf"}
                 onClick={() => {
                     setView({ selectedView: "DATABASE" });
-                    localStorage.setItem("view", "DATABASE");
                 }}
             >
                 <Database />
-            </div>
-            <div
-                className={view.selectedView === "OFFER" ? "users topf" : "dbs topf"}
-                onClick={() => {
-                    setView({ selectedView: "OFFER" });
-                }}
-            >
-                <FilePlus />
             </div>
             <div
                 className={view.selectedView === "APPOINTMENT" ? "users topf" : "dbs topf"}
@@ -37,6 +28,14 @@ export default function Sidebar({ setView, view }) {
                 }}
             >
                 <FilePlus />
+            </div>
+            <div
+                className={view.selectedView === "OFFER" ? "users topf" : "dbs topf"}
+                onClick={() => {
+                    setView({ selectedView: "OFFER" });
+                }}
+            >
+                <FileText />
             </div>
             <div
                 className={"dbs topf"}

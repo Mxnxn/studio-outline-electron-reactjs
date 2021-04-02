@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment } from "react";
 import { PDFViewer, View, Text, Document, Page, StyleSheet, Font } from "@react-pdf/renderer";
 
 Font.register({
@@ -102,7 +102,6 @@ const OfferLetter = ({ loading, state }) => {
             borderBottomColor: "black",
         },
         footer: {
-            width: 350,
             display: "flex",
             width: "40%",
             marginLeft: "auto",
