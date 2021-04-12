@@ -54,25 +54,16 @@ app.post("/generate", async (req, res) => {
         Obj.createCategory(endRow, { catname: "TOTAL:", cpaid: cpaid, total: total }, true);
         endRow += 1;
         Obj.longNoteSingleRow(endRow, "NOTE:", true);
-        Obj.longNotesWithIndex(
-            endRow + 1,
-            { value: "Estimate will be vary on the selection basis that might be a 10% variation", index: "1)" },
-            true
-        );
+        Obj.longNotesWithIndex(endRow + 1, { value: "Estimate will be vary on the selection basis that might be a 10% variation", index: "1)" }, true);
         Obj.longNotesWithIndex(
             endRow + 2,
             {
-                value:
-                    "Payment term includes 50% advance,45% on middle of the project and 5% after completion of project",
+                value: "Payment term includes 50% advance,45% on middle of the project and 5% after completion of project",
                 index: "2)",
             },
             true
         );
-        Obj.longNotesWithIndex(
-            endRow + 3,
-            { value: "10% of Each floor rise to drop the material to the site will charge extra.", index: "3)" },
-            true
-        );
+        Obj.longNotesWithIndex(endRow + 3, { value: "10% of Each floor rise to drop the material to the site will charge extra.", index: "3)" }, true);
         Obj.longNotes(
             endRow + 4,
             "THIS FILE IS THE PROPERTY OF STUDIO OUTLINE - INTERIOR DESIGNERS & MUST BE RETURNED ON REQUEST. IT IS SUBMITED AS CONFIDENTIAL INFORMATION IN CONNECTION WITH THE ENQUIRY, TENDER OR CONTRACT. IT IS NOT BE USED FOR ANY OTHER PURPOSES OR NOR MAY IT BE COPIED OR LENT WITHOUT OUR AUTHORITY IN WRITING.",
@@ -83,9 +74,8 @@ app.post("/generate", async (req, res) => {
             // logger.error(" /excel/generate EXCEL FILE IS BUSY!");
             return res.status(500).json({ code: "BUSY", message: "Please close sheet to overwrite!!" });
         }
-        await shell.showItemInFolder(
-            path.join(__dirname, `../../exports/${req.body.clientname}_${req.body.sitename}.xlsx`)
-        );
+        await shell.showItemInFolder(path.join(__dirname, `../../exports/${req.body.clientname}_${req.body.sitename}.xlsx`));
+
         return res.status(200).json({
             code: "SUCCESS",
             message: "DONE",

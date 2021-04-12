@@ -27,6 +27,15 @@ Font.register({
     src: require("../font/OSR.ttf").default,
 });
 
+Font.register({
+    family: "Arial Rounded",
+    src: require("../font/AR.ttf").default,
+});
+Font.register({
+    family: "TNR",
+    src: require("../font/TNR.ttf").default,
+});
+
 const AppointmentLetter = ({ loading, state }) => {
     const styles = StyleSheet.create({
         page: {
@@ -42,7 +51,7 @@ const AppointmentLetter = ({ loading, state }) => {
             marginBottom: 16,
         },
         heading: {
-            fontFamily: "Archia",
+            fontFamily: "Arial Rounded",
         },
         subHead: {
             fontFamily: "Comfortaa",
@@ -56,7 +65,7 @@ const AppointmentLetter = ({ loading, state }) => {
         },
 
         ntext: {
-            fontFamily: "Nunito",
+            fontFamily: "TNR",
             fontSize: 8,
         },
         row: {
@@ -78,6 +87,7 @@ const AppointmentLetter = ({ loading, state }) => {
         },
         letterNameText: {
             width: "auto",
+            fontFamily: "TNR",
             borderBottom: 1,
             borderBottomColor: "black",
         },
@@ -88,7 +98,7 @@ const AppointmentLetter = ({ loading, state }) => {
             width: "auto",
         },
         bodyText: {
-            fontFamily: "Opensans Normal",
+            fontFamily: "TNR",
             fontSize: 12,
             marginTop: 2,
             marginBottom: 2,
@@ -101,7 +111,7 @@ const AppointmentLetter = ({ loading, state }) => {
             alignItems: "flex-start",
         },
         bodyCat: {
-            fontFamily: "Nunito Bold",
+            fontFamily: "TNR",
             width: "auto",
             borderBottom: 1,
             display: "inline",
@@ -126,7 +136,7 @@ const AppointmentLetter = ({ loading, state }) => {
         },
         headName: {
             width: "100%",
-            fontFamily: "Nunito Bold",
+            fontFamily: "TNR",
             fontSize: 16,
             marginTop: 12,
             display: "flex",
@@ -145,6 +155,11 @@ const AppointmentLetter = ({ loading, state }) => {
                                     <View style={styles.righta}>
                                         <Text style={styles.heading}>Studio Outline</Text>
                                         <Text style={styles.subHead}>Interior Design – Architecture - Planning</Text>
+                                    </View>
+                                    <View style={styles.lefta}>
+                                        <Text style={{ ...styles.heading, fontSize: 9 }}>Web: www.studiooutline.in</Text>
+                                        <Text style={{ ...styles.heading, fontSize: 9 }}>Email: info@studiooutline.in</Text>
+                                        <Text style={{ ...styles.heading, fontSize: 9 }}>Phone: +91-8401527637</Text>
                                     </View>
                                 </View>
                                 <View style={{ ...styles.letterName, marginBottom: 16 }}></View>
@@ -167,77 +182,58 @@ const AppointmentLetter = ({ loading, state }) => {
                                 </View>
                             </View>
                             <View style={{ ...styles.headName, marginBottom: 12 }}>
-                                <Text style={styles.letterNameText}>
-                                    Our Design Consultancy Services Which Include The Following
-                                </Text>
+                                <Text style={styles.letterNameText}>Our Design Consultancy Services Which Include The Following</Text>
                             </View>
                             <View style={styles.bodyView}>
                                 <Text style={styles.bodyText}>• Site analysis that duly accounts for the context.</Text>
-                                <Text style={styles.bodyText}> • Conceptualization.</Text>
+                                <Text style={styles.bodyText}>• Conceptualization.</Text>
+                                <Text style={styles.bodyText}>• Translation of concepts into an executable design.</Text>
+                                <Text style={styles.bodyText}>• Consistent interaction and co-ordination for perfect on-site execution.</Text>
+                                <Text style={styles.bodyText}>• Site analysis with contextual references.</Text>
+                                <Text style={styles.bodyText}>• Conversion of concept into executable designs through development of execution drawings.</Text>
+                                <Text style={styles.bodyText}>• Selection of contractors and other labour agencies.</Text>
                                 <Text style={styles.bodyText}>
-                                    • Translation of concepts into an executable design.
+                                    • Interaction and co-ordination with site managers and agencies to ensure work is executed as Per designs.
                                 </Text>
-                                <Text style={styles.bodyText}>
-                                    • Consistent interaction and co-ordination for perfect on-site execution.
-                                </Text>
-                                <Text style={styles.bodyText}> • Site analysis with contextual references.</Text>
-                                <Text style={styles.bodyText}>
-                                    • Conversion of concept into executable designs through development of execution
-                                    drawings.
-                                </Text>
-                                <Text style={styles.bodyText}>
-                                    • Selection of contractors and other labour agencies.
-                                </Text>
-                                <Text style={styles.bodyText}>
-                                    • Interaction and co-ordination with site managers and agencies to ensure work is
-                                    executed as Per designs.
-                                </Text>
-                                <Text style={styles.bodyText}>
-                                    • Ensuring quality of workmanship is maintained on site.
-                                </Text>
-                                <Text style={styles.bodyText}>
-                                    • Selection of materials, fittings and hardware etc...
-                                </Text>
+                                <Text style={styles.bodyText}>• Ensuring quality of workmanship is maintained on site.</Text>
+                                <Text style={styles.bodyText}>• Selection of materials, fittings and hardware etc...</Text>
                                 <Text style={styles.bodyText}> • Selection of soft furnishings and art work.</Text>
+                                {state.rows.map((el, index) => (
+                                    <>
+                                        <View style={{ ...styles.bodyCatView, marginVertical: 6 }}>
+                                            <Text style={{ ...styles.bodyCat, fontSize: 14 }}>{el.heading}</Text>
+                                        </View>
+                                        <Text style={styles.bodyText}>{el.description}</Text>
+                                    </>
+                                ))}
 
-                                <View style={{ ...styles.bodyCatView, marginVertical: 7 }}>
-                                    <Text style={{ ...styles.bodyCat, fontSize: 16 }}>Payment Schedule:</Text>
+                                <View style={{ ...styles.bodyCatView, marginVertical: 6 }}>
+                                    <Text style={{ ...styles.bodyCat, fontSize: 14 }}>Payment Schedule:</Text>
                                 </View>
                                 <Text style={styles.bodyText}>
                                     The professional{" "}
-                                    <Text style={{ fontFamily: "Opensans", textDecoration: "underline" }}>
-                                        consultation fees for planning and interior designing and generating drawings,
-                                        sourcing of material & etc
+                                    <Text style={{ fontFamily: "TNR", textDecoration: "underline" }}>
+                                        consultation fees for planning and interior designing and generating drawings, sourcing of material & etc
                                     </Text>{" "}
                                     would be charge on lumsum basis i.e.{" "}
-                                    <Text style={{ fontFamily: "Opensans", textDecoration: "underline" }}>
-                                        Rs. {state.amount}
-                                    </Text>{" "}
-                                    to be paid.
+                                    <Text style={{ fontFamily: "TNR", textDecoration: "underline" }}>Rs. {state.amount}</Text> to be paid.
                                 </Text>
                                 <View style={{ marginVertical: 6 }}></View>
-                                <Text style={{ ...styles.bodyText, color: "red", fontFamily: "Opensans" }}>
-                                    Total workable Area ={" "}
-                                    <Text style={{ textDecoration: "underline" }}>{state.totalSqft} sq.</Text>{" "}
-                                    Approximate
+                                <Text style={{ ...styles.bodyText, color: "red", fontFamily: "TNR" }}>
+                                    Total workable Area = <Text style={{ textDecoration: "underline" }}>{state.totalSqft} sq.</Text> Approximate
                                 </Text>
+
                                 <View style={{ marginVertical: 6 }}></View>
                                 <Text style={{ ...styles.bodyText, fontSize: 8 }}>Note:</Text>
-                                <Text style={{ ...styles.bodyText, fontSize: 8 }}>
-                                    1. Site visit will be periodic as per req.
-                                </Text>
-                                <Text style={{ ...styles.bodyText, fontSize: 8 }}>
-                                    2. Fees once paid will not be refundable.
-                                </Text>
+                                <Text style={{ ...styles.bodyText, fontSize: 8 }}>1. Site visit will be periodic as per req.</Text>
+                                <Text style={{ ...styles.bodyText, fontSize: 8 }}>2. Fees once paid will not be refundable.</Text>
+                                <Text style={{ ...styles.bodyText, fontSize: 8 }}>3. GST 18% will be applicable on designing consultation charges.</Text>
                                 <View style={{ marginVertical: 6 }}></View>
+                                <View style={{ marginVertical: 6 }}></View>
+                                <View style={{ marginVertical: 6 }}></View>
+
                                 <Text style={{ ...styles.bodyText, fontSize: 8 }}>Thank you. Regards,</Text>
-                                <Text
-                                    style={{ ...styles.bodyText, fontFamily: "Opensans", fontSize: 16, marginTop: 12 }}
-                                >
-                                    Studio Outline,
-                                </Text>
-                                <Text style={{ ...styles.bodyText }}>Trupesh Purohit</Text>
-                                <Text style={{ ...styles.bodyText }}>Ruchita Mehta</Text>
+                                <Text style={{ ...styles.bodyText, fontFamily: "Arial Rounded", fontSize: 14, marginTop: 6 }}>Studio Outline</Text>
                             </View>
                             <View
                                 style={{
@@ -254,8 +250,8 @@ const AppointmentLetter = ({ loading, state }) => {
                                     style={{
                                         ...styles.letterNameText,
                                         borderBottom: 0,
-                                        fontFamily: "Opensans",
-                                        fontSize: 11,
+                                        fontFamily: "Arial Rounded",
+                                        fontSize: 10,
                                     }}
                                 >
                                     202 – SAI SHIVAM FLATS, 6 – SHRINIKITAN SOCIETY, SAMPTARAO COLONY, ALKAPURI - 390007

@@ -1,7 +1,13 @@
 import React, { useState } from "react";
+import { X } from "react-feather";
 import AppointmentLetter from "./Template/AppointmentLetter";
 
 const AppointmentSection = (props) => {
+    const [authenticated, setAuthenticated] = useState({
+        password: "",
+        success: false,
+    });
+
     const getDate = (pre) => {
         let date = new Date(pre);
         let dd = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
@@ -22,10 +28,41 @@ const AppointmentSection = (props) => {
         arrayOfAddress: "",
         amount: "",
         totalSqft: "",
+        rows: [],
         display: false,
     });
 
-    return (
+    const getAuthenticated = () => {
+        if (authenticated.password === "truchi891") {
+            setAuthenticated({ ...authenticated, success: true });
+        }
+    };
+
+    const viewAuthentication = () => {
+        return (
+            <div className="cont">
+                <div className="title-row">
+                    <h1>Appointment Letter</h1>
+                </div>
+                <div className="data-row">
+                    <input
+                        type="password"
+                        className="input-field mr-2"
+                        placeholder="Enter Pin"
+                        value={authenticated.password}
+                        onChange={(evt) => {
+                            setAuthenticated({ ...authenticated, password: evt.target.value });
+                        }}
+                    />
+                    <button className="gen-btn" onClick={getAuthenticated}>
+                        Enter
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
+    return authenticated.success ? (
         <div className="cont">
             <div className="title-row">
                 <h1>Appointment Letter</h1>
@@ -68,8 +105,6 @@ const AppointmentSection = (props) => {
                         setLetterData({ ...letterData, display: false, totalSqft: evt.target.value });
                     }}
                 />
-            </div>
-            <div className="data-row">
                 <input
                     className="input-field mr-2"
                     placeholder="Select Date"
@@ -78,6 +113,52 @@ const AppointmentSection = (props) => {
                         setLetterData({ ...letterData, display: false, date: getDate(evt.target.value) });
                     }}
                 />
+            </div>
+            {letterData.rows.map((el, index) => (
+                <div className="data-row">
+                    <input
+                        className="input-field mr-2"
+                        placeholder="Enter Heading"
+                        value={el.heading}
+                        onChange={(evt) => {
+                            let temp = [...letterData.rows];
+                            temp[index].heading = evt.target.value;
+                            setLetterData({ ...letterData, rows: temp });
+                        }}
+                    />
+                    <input
+                        className="input-field mr-2"
+                        style={{ width: "1000px" }}
+                        placeholder="Enter Description"
+                        value={el.description}
+                        onChange={(evt) => {
+                            let temp = [...letterData.rows];
+                            temp[index].description = evt.target.value;
+                            setLetterData({ ...letterData, rows: temp });
+                        }}
+                    />
+                    <span
+                        style={{ display: "flex", marginRight: "auto", alignItems: "center", marginTop: 5, cursor: "pointer" }}
+                        onClick={() => {
+                            let temp = [...letterData.rows];
+                            temp.splice(index, 1);
+                            setLetterData({ ...letterData, rows: temp });
+                        }}
+                    >
+                        <X size="18" style={{ color: "red" }} />
+                    </span>
+                </div>
+            ))}
+            <div className="data-row">
+                <button
+                    className="gen-btn mr-2"
+                    onClick={() => {
+                        let temp = { heading: "", description: "", rid: letterData.rows.length + 1 };
+                        setLetterData({ ...letterData, rows: [...letterData.rows, temp] });
+                    }}
+                >
+                    Add a Section
+                </button>
                 <button
                     className="gen-btn"
                     onClick={() => {
@@ -91,6 +172,8 @@ const AppointmentSection = (props) => {
                 <AppointmentLetter loading={letterData.display} state={letterData} />
             </div>
         </div>
+    ) : (
+        viewAuthentication()
     );
 };
 
