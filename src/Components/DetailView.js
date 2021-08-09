@@ -17,6 +17,10 @@ const DetailView = ({ selectView, setSelectView, setToast }) => {
         url: { value: "", edit: false },
         cid: selectView.id,
         saved: false,
+        inputValues: {
+            catName: "",
+            subName: "",
+        },
     });
 
     const [addedDataField, setAddedDataField] = useState([]);
@@ -72,13 +76,7 @@ const DetailView = ({ selectView, setSelectView, setToast }) => {
             setToast({ message: "Add a entry to save!!!", type: "danger", isVisible: true });
         }
         for (let i = 0; i < dataField.length; i++) {
-            if (
-                !dataField[i].catname ||
-                !dataField[i].catid ||
-                !dataField[i].description ||
-                !dataField[i].subcatname ||
-                !dataField[i].subcatid
-            ) {
+            if (!dataField[i].catname || !dataField[i].catid || !dataField[i].description || !dataField[i].subcatname || !dataField[i].subcatid) {
                 setToast({ message: "Please delete empty rows!!", type: "danger", isVisible: true });
                 i = dataField.length;
                 return null;
@@ -245,6 +243,32 @@ const DetailView = ({ selectView, setSelectView, setToast }) => {
         }
     };
 
+    const addCategory = async () => {
+        if (!state.inputValues.catName) {
+            alert("Field can't be empty");
+        }
+        try {
+            const res = await Category.addCategory({ categoryname: state.inputValues.catName.toUpperCase() });
+            if (res.data) {
+                setState({ ...state, categories: [...state.categories, { ...res.data }], inputValues: { ...state.inputValues, catName: "" } });
+            }
+        } catch (error) {}
+    };
+
+    const addSubcategory = async () => {
+        if (!state.inputValues.subName) {
+            alert("Field can't be empty");
+        }
+        try {
+            const res = await Subcategory.addSubcategory({ subcatname: state.inputValues.subName.toUpperCase() });
+            if (res.data) {
+                setState({ ...state, subcategories: [...state.subcategories, { ...res.data }], inputValues: { ...state.inputValues, subName: "" } });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         state.stopLoading && (
             <>
@@ -316,21 +340,12 @@ const DetailView = ({ selectView, setSelectView, setToast }) => {
                                                 value={state.url.value}
                                                 placeholder={`"https://localhost"`}
                                             />
-                                            <button
-                                                style={{ height: 30, width: 30 }}
-                                                className="check-btn"
-                                                onClick={() => urlChanger()}
-                                            >
+                                            <button style={{ height: 30, width: 30 }} className="check-btn" onClick={() => urlChanger()}>
                                                 <Check />
                                             </button>
                                         </div>
                                     ) : (
-                                        <h2
-                                            onDoubleClick={() =>
-                                                setState({ ...state, url: { ...state.url, edit: true } })
-                                            }
-                                            style={{ cursor: "pointer" }}
-                                        >
+                                        <h2 onDoubleClick={() => setState({ ...state, url: { ...state.url, edit: true } })} style={{ cursor: "pointer" }}>
                                             {state.url.value ? state.url.value : "No Url Found"}
                                         </h2>
                                     )}
@@ -338,7 +353,61 @@ const DetailView = ({ selectView, setSelectView, setToast }) => {
                             </div>
                         </div>
                         <div className="data-row"></div>
-
+                        <div className="title-row">
+                            <h1>Quick Addition</h1>
+                        </div>
+                        <div className="data-rowx" style={{ flexDirection: "row" }}>
+                            <div style={{ marginRight: 30 }}>
+                                <table className="table">
+                                    <thead className="thead">
+                                        <th>Category</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <input
+                                                    value={state.inputValues.catName}
+                                                    onChange={(evt) => {
+                                                        setState({ ...state, inputValues: { ...state.inputValues, catName: evt.target.value } });
+                                                    }}
+                                                    className="desc-field"
+                                                    type="text"
+                                                    placeholder={`'CIVIL WORK'`}
+                                                />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <span className="add-row save" onClick={() => addCategory()}>
+                                    Save
+                                </span>
+                            </div>
+                            <div style={{ marginRight: 30 }}>
+                                <table className="table">
+                                    <thead className="thead">
+                                        <th>Subcategory</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <input
+                                                    value={state.inputValues.subName}
+                                                    onChange={(evt) => {
+                                                        setState({ ...state, inputValues: { ...state.inputValues, subName: evt.target.value } });
+                                                    }}
+                                                    className="desc-field"
+                                                    type="text"
+                                                    placeholder={`'CIVIL WORK'`}
+                                                />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <span className="add-row save" onClick={() => addSubcategory()}>
+                                    Save
+                                </span>
+                            </div>
+                        </div>
                         <div className="title-row">
                             <h1>Add Entries</h1>
                         </div>

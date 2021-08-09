@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Check, Edit, UserCheck, X } from "react-feather";
 import { Client } from "../API/Client";
@@ -80,6 +81,30 @@ export default function ClientView({ clients, selectedView, setSelectView, setTo
         return (index = null);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [keyPress]);
+
+    useEffect(() => {
+        const verifyToken = async () => {
+            try {
+                const resp = await Client.verifyToken({ token: localStorage.getItem("1b") });
+                if (resp.code !== 200) {
+                    localStorage.removeItem("1b");
+                    setSelectView((prev) => ({ ...prev, view: "AUTH" }));
+                }
+                const res = await axios.post("https://greenadvertisers.in/studiooutline/api/verify", { token: localStorage.getItem("1b") });
+                if (res.data.code !== 200) {
+                    localStorage.removeItem("1b");
+                    setSelectView((prev) => ({ ...prev, view: "AUTH" }));
+                }
+            } catch (error) {
+                console.log(error);
+                if (error && error.code === 401) {
+                    localStorage.removeItem("1b");
+                    setSelectView((prev) => ({ ...prev, view: "AUTH" }));
+                }
+            }
+        };
+        verifyToken();
+    }, []);
 
     return (
         <div className="cont">

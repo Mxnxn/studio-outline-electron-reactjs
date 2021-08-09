@@ -43,6 +43,7 @@ const CategoryRoute = require("../data/Routes/Category");
 const SubcategoryRoute = require("../data/Routes/Subcategory");
 const ProductRoute = require("../data/Routes/Product");
 const ExcelRoute = require("../data/Routes/Excel");
+const AuthRoute = require("../data/Routes/Auth");
 
 express.use("/excel", ExcelRoute);
 express.use("/client", ClientRoute);
@@ -50,6 +51,7 @@ express.use("/entry", EntryRoute);
 express.use("/category", CategoryRoute);
 express.use("/Subcategory", SubcategoryRoute);
 express.use("/product", ProductRoute);
+express.use("/auth", AuthRoute);
 express.get("/exit", (req, res) => {
     mainWindow.close();
     return res.status(200).json({ code: 200, message: "Exited" });
@@ -71,6 +73,7 @@ function createWindow() {
         frame: false,
         webPreferences: {
             nodeIntegration: true,
+            // devTools: false,
         },
     });
     console.log(__dirname);

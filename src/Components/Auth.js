@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 
 const Auth = ({ selectView, setSelectView }) => {
@@ -7,12 +8,19 @@ const Auth = ({ selectView, setSelectView }) => {
         status: false,
     });
 
-    const check = () => {
-        if (state.uname === "studio.outline" && state.password === "Outline@20891") {
-            setSelectView({ ...selectView, view: "FRONT" });
-            localStorage.setItem("flag", true);
-        } else {
-            setState({ ...state, status: "Wrong Credential" });
+    const check = async () => {
+        if (!state.uname || !state.password) return setState({ ...state, status: "Field's Can't be Empty!" });
+        try {
+            const res = await axios.post("https://greenadvertisers.in/studiooutline/api/login", { username: state.uname, password: state.password });
+            if (res.data.code === 403) {
+                return setState({ ...state, status: "Something Went Wrong!" });
+            }
+            if (res.data.data && res.data.code) {
+                setSelectView({ ...selectView, view: "FRONT" });
+                localStorage.setItem("1b", res.data.data);
+            }
+        } catch (error) {
+            setState({ ...state, status: "Something Went Wrong!" });
         }
     };
 

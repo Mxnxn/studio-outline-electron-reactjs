@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./css/style.scss";
+import "./css/style.css";
 import "./css/bootstrap.min.css";
 import { HashRouter } from "react-router-dom";
 import MainView from "./Components/MainView";
@@ -14,7 +14,7 @@ const history = createHashHistory();
 
 function App() {
     const [state, setState] = useState({
-        view: localStorage.getItem("flag") ? "FRONT" : "AUTH",
+        view: localStorage.getItem("1b") ? "FRONT" : "AUTH",
         id: undefined,
     });
 
@@ -64,9 +64,7 @@ function App() {
                 </div>
                 {state.view === "AUTH" && <Auth selectView={state} setSelectView={setState} />}
                 {state.view === "FRONT" && <MainView setSelectView={setState} setToast={setToast} />}
-                {state.view === "BACK" && (
-                    <DetailView selectView={state} setSelectView={setState} setToast={setToast} />
-                )}
+                {state.view === "BACK" && <DetailView selectView={state} setSelectView={setState} setToast={setToast} />}
                 <Toast msg={toast.message} type={toast.type} visible={toast.isVisible} setToast={toast} />
             </div>
         </HashRouter>

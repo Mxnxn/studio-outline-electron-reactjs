@@ -72,6 +72,18 @@ class ClientAPI {
             }
         });
     }
+
+    verifyToken(formData) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/verify`, formData);
+                if (!res.data.msg) throw res.data;
+                resolve(res.data);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
 }
 
 export let Client = new ClientAPI();

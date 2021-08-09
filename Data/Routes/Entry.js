@@ -1,9 +1,10 @@
 const app = require("express").Router();
 const Entry = require("../api/entries");
+
 app.use("/*", (req, res, next) => next());
+
 app.post("/add", async (req, res) => {
     try {
-        console.log(req.body);
         if (!req.body.cid || !req.body.catid || !req.body.product) {
             return res.status(400).json({
                 message: "Invalid Request",
